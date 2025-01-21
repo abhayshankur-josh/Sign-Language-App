@@ -1,24 +1,2 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Sign-Language-App
+The Sign Language Educator App is a web application designed to bridge the communication gap between the deaf and hearing communities by providing an accessible platform for learning sign language. This app aims to educate individuals on sign language, enabling them to communicate effectively with deaf individuals.
