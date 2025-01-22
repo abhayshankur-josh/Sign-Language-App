@@ -1,0 +1,30 @@
+<%# <form accept-charset="UTF-8" action="/users" method="post">
+  <input type="text" name="user[full_name]" value="Acme" />
+  <input type="text" name="user[phone]" value="12345" />
+  <input type="text" name="user[address][postcode]" value="12345" />
+  <input type="text" name="user[address][city]" value="Carrot City" />
+</form> %>
+<%= link_to 'View All', {:action=>"index", :controller=>"users"} %>
+<form action="/users" method="post">
+    <h1>New User Enrollment</h1>
+    <div>
+        <input type="text" name="full_name" id="full_name" placeholder="Enter your Full Name">
+    </div>
+    <div>
+        <input type="email" name="email" id="email" placeholder="Enter your Email">
+    </div>
+    <div>
+        <input type="password" name="password" id="password" placeholder="Enter your Password">
+    </div>
+    <div>
+        <select name="role_id" id="role_id">
+            <option value="00" selected disabled>Select the Role</option>
+            <option value="01">User</option>
+            <option value="02">Expert</option>
+            <option value="03">Admin</option>
+        </select>
+    </div>
+
+    <br>
+    <input type="submit" value="Submit">
+</form>
