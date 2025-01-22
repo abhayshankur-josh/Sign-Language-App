@@ -60,6 +60,9 @@ group :development do
   gem "rubocop-graphql", require: false
   # Want to add rucocop to RSpec code?
   gem "rubocop-rspec", require: false
+
+  # Adds a comment summarizing the current schema.
+  gem "annotate"
 end
 
 group :test do
