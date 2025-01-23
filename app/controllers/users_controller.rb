@@ -11,6 +11,7 @@ class UsersController < ApplicationController
       role_id: params[:role_id]
     }
     user_query_class.add_user(user_params)
+    redirect_to action: :index
   end
 
   def show
