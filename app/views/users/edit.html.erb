@@ -1,6 +1,5 @@
-<div class="container">
-    <%=  link_to 'View All', {:action=>"index", :controller=>"users"} %>
-</div>
+<%= render partial:"/shared/navbar" %>
+
 <form class="container row m-auto" action="/users" method="patch">
   <h1>Edit User Enrollment</h1>
   <div class="col-md-6">
