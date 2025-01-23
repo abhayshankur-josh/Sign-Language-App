@@ -10,10 +10,16 @@ class UsersController < ApplicationController
       password: params[:password],
       role_id: params[:role_id]
     })
-    # redirect_to users
+    redirect_to(@users)
   end
 
   def show
+    # Extract the composite ID value from URL parameters.
+    id = params.extract_value(:id)
+    @user = User.find(id).first
+  end
+
+  def edit
     # Extract the composite ID value from URL parameters.
     id = params.extract_value(:id)
     @user = User.find(id).first
