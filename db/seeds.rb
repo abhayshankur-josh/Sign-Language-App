@@ -34,18 +34,6 @@ User.destroy_all
 
 User.create!([
   {
-    full_name: "User Abhay",
-    email: "user@gmail.com",
-    password: "abhay123",
-    role_id: 01
-  },
-  {
-    full_name: "Expert Abhay",
-    email: "expert@gmail.com",
-    password: "abhay123",
-    role_id: 02
-  },
-  {
     full_name: "Admin Abhay",
     email: "admin@gmail.com",
     password: "abhay123",
