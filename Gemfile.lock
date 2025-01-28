@@ -101,7 +101,6 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     drb (2.2.1)
-    error_highlight (0.7.0)
     erubi (1.13.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -216,6 +215,8 @@ GEM
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.37.0)
       parser (>= 3.3.1.0)
+    rubocop-graphql (1.5.4)
+      rubocop (>= 1.50, < 2)
     rubocop-minitest (0.36.0)
       rubocop (>= 1.61, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
@@ -232,6 +233,8 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
+    rubocop-rspec (3.4.0)
+      rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
     securerandom (0.4.1)
@@ -286,12 +289,15 @@ DEPENDENCIES
   brakeman
   capybara
   debug
-  error_highlight (>= 0.4.0)
   importmap-rails
   jbuilder
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
+  rubocop
+  rubocop-graphql
+  rubocop-rails
   rubocop-rails-omakase
+  rubocop-rspec
   selenium-webdriver
   sprockets-rails
   sqlite3 (>= 1.4)

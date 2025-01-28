@@ -50,7 +50,16 @@ group :development do
   gem "web-console"
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
-  gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
+  # gem "error_highlight", "~> 0.7.0", platforms: [ :ruby ]
+
+  # Setting up Rubocop
+  gem "rubocop", require: false
+
+  gem "rubocop-rails", require: false
+  # Want to add rubocop to graphql api code?
+  gem "rubocop-graphql", require: false
+  # Want to add rucocop to RSpec code?
+  gem "rubocop-rspec", require: false
 end
 
 group :test do
