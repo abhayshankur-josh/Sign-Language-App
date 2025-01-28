@@ -1,0 +1,9 @@
+%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    .container-fluid 
+        - if admin_signed_in? 
+            .navbar-text.text-light Hello #{current_admin.email}
+            .mx-auto.order-0
+                .navbar-brand.mx-auto.font-weight-bold{style: "font-size: 1.5em;"} Admin Panel 
+            %ul.navbar-nav.ml-auto
+                %li.nav-item
+                    = button_to 'Sign out', destroy_admin_session_path, method: :delete, class:"nav-link btn btn-outline-danger"
