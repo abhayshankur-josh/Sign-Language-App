@@ -63,6 +63,7 @@ group :development do
   gem "rubocop-graphql", require: false
   # Want to add rucocop to RSpec code?
   gem "rubocop-rspec", require: false
+  gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
 
   # Adds a comment summarizing the current schema.
   gem "annotate"
