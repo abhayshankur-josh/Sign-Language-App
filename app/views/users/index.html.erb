@@ -1,0 +1,18 @@
+<%= render partial:"/shared/navbar" %>
+
+<div class="container">
+
+  <table>
+    <tr><th><h1>Names of all the Users</h1></th></tr>
+    <tr>
+      <td>Name</td><td>Action</td>
+    </tr>
+    <% @users.each do |user| %>
+    <tr>
+      <td><%= user.full_name %> </td><td><%= link_to 'View', user %> <%= link_to 'Edit', edit_user_path(user) %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <%= link_to 'Add New Users', {:action=>"new", :controller=>"users"} %>
+</div>

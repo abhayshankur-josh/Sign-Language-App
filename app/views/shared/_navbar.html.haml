@@ -1,0 +1,15 @@
+%nav.navbar.navbar-expand-lg.bg-body-tertiary
+  .container-fluid
+    %a.navbar-brand
+      = image_tag("images.ico", :alt=>"Logo", :width=>"30", :height=>"24", :class=>"d-inline-block align-text-top")
+      Sign Language App
+    %button.navbar-toggler{"aria-controls" => "navbarNav", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-bs-target" => "#navbarNav", "data-bs-toggle" => "collapse", type: "button"}
+      %span.navbar-toggler-icon
+    #navbarNav.collapse.navbar-collapse
+      %ul.navbar-nav
+        %li.nav-item
+          %a.nav-link.active{"aria-current" => "page", href: "/"} Home
+        %li.nav-item
+          = link_to "Users", users_path, class: "nav-link"
+        %li.nav-item
+          = link_to "Admin", admins_path, class: "nav-link"
