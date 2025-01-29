@@ -1,10 +1,10 @@
 class AdminsController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_user!
   before_action :set_admin, only: %i[ show edit update destroy ]
 
   # GET /admins or /admins.json
   def index
-    @admins = User.all
+    @admins = MasterUserQuery.instance.get_all_users
   end
 
   # GET /admins/1 or /admins/1.json
@@ -61,7 +61,7 @@ class AdminsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_admin
-      @admin = Admin.find(params[:id])
+      @admin = MasterUserQuery.instance.get_user(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
