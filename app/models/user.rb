@@ -11,7 +11,7 @@
 #  reset_password_token   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  role_id                :integer          default(3)
+#  role_id                :integer          default(1)
 #
 # Indexes
 #
@@ -29,7 +29,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # validates :full_name, :role_id, presence: true
-  # validates :email, uniqueness: true, presence: true
+  validates :full_name, :role_id, presence: true
+  validates :email, uniqueness: true, presence: true
   belongs_to :role
 end

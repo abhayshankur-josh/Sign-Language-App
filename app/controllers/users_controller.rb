@@ -2,11 +2,13 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    p "Current user role id: #{current_user.role_id}"
-    if current_user.role_id == 3 
-      redirect_to controller: "admins", action: "index"
-    end
-    @users = user_query_class.get_all_users
+    # p "Current user role id: #{current_user.role_id}"
+    # if current_user.role_id == 3 
+    #   redirect_to controller: "admins", action: "index"
+    # end
+    p "In User Contoller"
+
+    # @users = user_query_class.get_all_users
   end
 
   # def create
