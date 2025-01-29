@@ -1,10 +1,10 @@
 class AdminsController < ApplicationController
   before_action :authenticate_admin!
-  # before_action :set_admin, only: %i[ show edit update destroy ]
+  before_action :set_admin, only: %i[ show edit update destroy ]
 
   # GET /admins or /admins.json
   def index
-    @admins = Admin.all
+    @admins = User.all
   end
 
   # GET /admins/1 or /admins/1.json
@@ -13,7 +13,7 @@ class AdminsController < ApplicationController
 
   # GET /admins/new
   def new
-    @admin = Admin.new
+    @admin = User.new
   end
 
   # GET /admins/1/edit
