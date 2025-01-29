@@ -1,11 +1,19 @@
+<%# <h1>New admin</h1> %>
+
+<% #render "form", admin: @admin %>
+
+<%# <br> %>
+
+<%# <div> %>
+  <% #link_to "Back to admins", admins_path %>
+<%# </div> %>
+
 <% content_for :title, "New admin" %>
 
-<h1>New admin</h1>
+<%= render "navbar" %>
 
-<%= render "form", admin: @admin %>
+<section class="container-fluid">
+  <%= render "form", admin: @admin %>
+</section>
 
-<br>
-
-<div>
-  <%= link_to "Back to admins", admins_path %>
-</div>
+<%= render "/shared/footer" %>
