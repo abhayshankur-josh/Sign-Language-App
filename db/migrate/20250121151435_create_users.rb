@@ -2,9 +2,7 @@ class CreateUsers < ActiveRecord::Migration[7.2]
   def change
     create_table :users do |t|
       t.string :full_name
-      t.string :email
-      t.string :password
-      t.integer :role_id
+      t.integer :role_id, default: 03
       t.timestamps
     end
 
