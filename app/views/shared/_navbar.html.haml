@@ -7,9 +7,9 @@
       %span.navbar-toggler-icon
     #navbarNav.collapse.navbar-collapse
       %ul.navbar-nav
-        %li.nav-item
-          %a.nav-link.active{"aria-current" => "page", href: "/"} Home
         -# %li.nav-item
-        -#   = link_to "Users", users_path, class: "nav-link"
+        -#   %a.nav-link.active{"aria-current" => "page", href: "/"} Home
+        %li.nav-item
+          = link_to "Users", users_path, class: "nav-link"
         %li.nav-item
           = link_to "Admin", admins_path, class: "nav-link"

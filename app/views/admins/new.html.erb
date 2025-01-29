@@ -1,19 +1,55 @@
-<%# <h1>New admin</h1> %>
-
-<% #render "form", admin: @admin %>
-
-<%# <br> %>
-
-<%# <div> %>
-  <% #link_to "Back to admins", admins_path %>
-<%# </div> %>
 
 <% content_for :title, "New admin" %>
 
-<%= render "navbar" %>
+<%= render "header" %>
+<%#= render "sidebar" %>
 
-<section class="container-fluid">
-  <%= render "form", admin: @admin %>
+<%# <section class="container-fluid"> %>
+  <%#= render "form", admin: @admin %>
+<%# </section> %>
+
+<section class="main-content">
+  <div class="container mt-5 mb-5">
+      <h2 class="mb-4">Add New User</h2>
+      <div class="row d-flex justify-content-around">
+        <!--
+          <div class="col-md-4 text-center mb-3">
+              <div class="card shadow-sm p-3 d-flex align-items-center">
+                  <%= image_tag 'user-placeholder.svg', class: "rounded-circle mb-3", alt: "Profile Picture", size: "200" %>
+                  <p>JPG or PNG no larger than 5 MB.</p>
+                  <button class="btn btn-primary">Upload new image</button>
+              </div>
+          </div>
+        -->
+          <div class="col">
+            <div class="card shadow-sm p-4">
+                <form>
+                  <div class="mb-3">
+                      <label for="full_name" class="form-label">Full Name</label>
+                      <input type="text" class="form-control" id="full_name" placeholder="Full Name">
+                  </div>
+                  <div class="mb-3">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="email" placeholder="Email">
+                  </div>
+                  <div class="mb-3">
+                      <label for="role" class="form-label">Role</label>
+                      <select class="form-select" id="role">
+                          <option selected disable>Select the role...</option>
+                          <option value="3">Administrator</option>
+                          <option value="2">Expert</option>
+                          <option value="1">User</option>
+                      </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary ">
+                      <i class="bi bi-person-plus"></i> Add User
+                  </button>
+                </form>
+            </div>
+          </div>
+      </div>
+  </div>
+
 </section>
-
+  
 <%= render "/shared/footer" %>

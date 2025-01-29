@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_29_135548) do
 
   create_table "users", force: :cascade do |t|
     t.string "full_name"
-    t.integer "role_id", default: 3
+    t.integer "role_id", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
