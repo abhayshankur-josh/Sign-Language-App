@@ -39,7 +39,7 @@ class UsersController < ApplicationController
 
   private
 
-  def user_query_class
-    @user_query_class ||= UserQuery.new
-  end
+  # def user_query_class
+  #   @user_query_class ||= UserQuery.new
+  # end
 end
