@@ -2,6 +2,14 @@
 #
 
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      get "/*a", to: "application#not_found"
+      post "auth/login", to: "auth#login"
+      resources :users, only: [ :index, :show, :create ]
+    end
+  end
+
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
