@@ -1,4 +1,4 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < Api::V1::ApplicationController
   before_action :authorize_request, except: :create
   before_action :set_user, only: [ :update, :show, :destory ]
 
