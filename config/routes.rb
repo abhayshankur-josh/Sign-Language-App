@@ -4,9 +4,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      get "/*a", to: "application#not_found"
       post "auth/login", to: "auth#login"
+      delete "auth/signout", to: "auth#signout"
       resources :users, only: [ :index, :show, :create ]
+
+      get "/*a", to: "application#not_found"
     end
   end
 
