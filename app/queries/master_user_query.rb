@@ -24,7 +24,7 @@ class MasterUserQuery
     user.save
   end
 
-  def add_expert(user, role_name="user")
+  def add_expert(user, role_name = "user")
     user.role_id = RoleQuery.instance.get_expert_id
     user.save
   end

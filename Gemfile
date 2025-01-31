@@ -80,4 +80,4 @@ gem "jsbundling-rails", "~> 1.3"
 
 gem "devise", "~> 4.9"
 
-gem 'jwt', '~> 2.10', '>= 2.10.1'
+gem "jwt", "~> 2.10", ">= 2.10.1"

@@ -1,11 +1,13 @@
-class Api::V1::ApplicationController < ApplicationController::API
+require_relative "../json_web_token"
+
+class Api::V1::ApplicationController < ApplicationController
     def not_found
-        render json: { error: 'not_found' }
+        render json: { error: "not_found" }
     end
-    
+
     def authorize_request
-        header = request.headers['Authorization']
-        header = header.split(' ').last if header
+        header = request.headers["Authorization"]
+        header = header.split(" ").last if header
         begin
             @decoded = JsonWebToken.decode(header)
             @current_user = User.find(@decoded[:user_id])
