@@ -21,7 +21,6 @@ class Api::V1::AuthController < Api::V1::ApplicationController
 
   # POST /auth/signup
   def signup
-
   end
 
   # DELETE /auth/signout
@@ -37,6 +36,4 @@ class Api::V1::AuthController < Api::V1::ApplicationController
   def login_params
     params.permit(:email, :password)
   end
-
-
 end
