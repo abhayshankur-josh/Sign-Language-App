@@ -1,4 +1,4 @@
-class AdminQuery
+class MasterUserQuery
   # Class-level instance variable to hold the single instance
   @instance = nil
 
@@ -8,18 +8,22 @@ class AdminQuery
   end
 
   def initialize
-    admin_id = RoleQuery.instance.get_admin_id
-    @admins = User.where(role_id: admin_id)
+    @users = User.all
   end
 
-  def add_admin(admin)
-    admin[:role_id] = RoleQuery.instance.get_admin_id
-    User.create!(admin)
+  def get_all_users
+    @users
+  end
+
+  def add_user(user, role_name)
+    user[:role_id] = RoleQuery.instance.get_role_id(role_name)
+    User.create!(user)
   end
 
   def get_user(id)
     @users.find(id)
   end
+
 
   private_class_method :new
 end

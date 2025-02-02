@@ -14,6 +14,6 @@ require:
   - rubocop-graphql
 AllCops:
   NewCops: enable
-RSpec/FilePath:
+Rails/FilePath:
   Enabled: false
 

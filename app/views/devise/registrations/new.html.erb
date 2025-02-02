@@ -1,29 +1,57 @@
-<h2>Sign up</h2>
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-sm-center h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                <div class="text-center my-5">
+                  <%= image_tag("logo.ico", alt: "logo", width: "100") %>
+                  <h3>GestureGuide</h3>
+                  <p>Transforming Hands into Voices</p>
+                </div>
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
+                        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'needs-validation', autocomplete: 'off' }) do |f| %>
+                            <%= render "devise/shared/error_messages", resource: resource %>
+                            <div class="mb-3">
+                                <%= f.label :email, 'E-Mail Address', class: 'mb-2 text-muted' %>
+                                <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', required: true %>
+                                <div class="invalid-feedback">
+                                    Email is invalid
+                                </div>
+                            </div>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+                            <div class="mb-3">
+                                <div class="mb-2 w-100">
+                                    <%= f.label :password, 'Password', class: 'text-muted' %>
+                                </div>
+                                <% if @minimum_password_length %>
+                                <em>(<%= @minimum_password_length %> characters minimum)</em>
+                                <% end %><br />
+                                <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', required: true %>
+                            </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+                            <div class="mb-3">
+                                <div class="mb-2 w-100">
+                                    <%= f.label :password_confirmation, 'Password', class: 'text-muted' %>
+                                </div>
+                                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control', required: true %>
+                            </div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+                            <div class="d-flex align-items-center">
+                                <%= f.submit 'Sign Up', class: 'btn btn-primary ms-auto' %>
+                            </div>
+                        <% end %>
+                    </div>
+                    <div class="card-footer py-3 border-0">
+                        <div class="text-center">
+                            Already have an account? <%= link_to "Login", new_session_path(resource_name), class: 'text-dark' %>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5 text-muted">
+                    Copyright &copy; 2017-2021 &mdash; OptiSync Inc.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

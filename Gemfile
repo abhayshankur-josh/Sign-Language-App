@@ -46,6 +46,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "overcommit", "~> 0.66.0"
 end
 
 group :development do
