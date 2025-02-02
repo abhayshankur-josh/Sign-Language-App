@@ -43,6 +43,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "overcommit", "~> 0.66.0"
 end
 
 group :development do
@@ -51,6 +53,15 @@ group :development do
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
   gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
+
+  # Setting up Rubocop
+  gem "rubocop", require: false
+
+  gem "rubocop-rails", require: false
+  # Want to add rubocop to graphql api code?
+  gem "rubocop-graphql", require: false
+  # Want to add rucocop to RSpec code?
+  gem "rubocop-rspec", require: false
 end
 
 group :test do
