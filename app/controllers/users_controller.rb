@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   def index
     # p "Current user role id: #{current_user.role_id}"
-    # if current_user.role_id == 3 
+    # if current_user.role_id == 3
     #   redirect_to controller: "admins", action: "index"
     # end
     p "In User Contoller"

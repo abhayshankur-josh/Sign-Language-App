@@ -27,7 +27,7 @@ class RoleQuery
     @roles.find_by(role_name: "expert").id
   end
 
-  def get_role_id(role_name='user')
+  def get_role_id(role_name = "user")
     @roles.find_by(role_name: role_name).id
   end
 

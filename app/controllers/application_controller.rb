@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   ADMIN_ROLE_ID = 3
 
   def page_not_found
-    raise ActionController::RoutingError.new('Not Found')
+    raise ActionController::RoutingError.new("Not Found")
   rescue
     render_404
   end
@@ -15,5 +15,4 @@ class ApplicationController < ActionController::Base
   def render_404
     render file: "#{Rails.root}/public/404.html", status: :not_found
   end
-
 end
