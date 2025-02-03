@@ -1,6 +1,5 @@
 class MasterUserQuery
-  # Class-level instance variable to hold the single instance
-  @instance = nil
+  attr_accessor :users
 
   # Class method to return the single instance
   def self.instance
@@ -8,7 +7,7 @@ class MasterUserQuery
   end
 
   def initialize
-    @users = User.all
+    @users ||= User.all
   end
 
   def get_all_users
