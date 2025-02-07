@@ -55,7 +55,7 @@ group :development do
   gem "web-console"
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
-  gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
+  # gem "error_highlight", "~> 0.7.0", platforms: [ :ruby ]
 
   # Setting up Rubocop
   gem "rubocop", require: false
@@ -79,3 +79,5 @@ end
 gem "jsbundling-rails", "~> 1.3"
 
 gem "devise", "~> 4.9"
+
+gem "jwt", "~> 2.10", ">= 2.10.1"

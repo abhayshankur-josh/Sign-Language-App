@@ -14,14 +14,14 @@
 # https://github.com/sds/overcommit#configuration
 #
 # Uncomment the following lines to make the configuration take effect.
+gemfile: Gemfile
 
 PreCommit:
- RuboCop:
-   enabled: true
-   on_warn: fail # Treat all warnings as failures
-   problem_on_unmodified_line: ignore # run RuboCop only on modified code
-   
-#
+  RuboCop:
+    enabled: true
+    on_warn: fail # Treat all warnings as failures
+    problem_on_unmodified_line: ignore # run RuboCop only on modified code
+
 #  TrailingWhitespace:
 #    enabled: true
 #    exclude:
