@@ -1,0 +1,14 @@
+%header#header.header
+    %nav.navbar.navbar-expand-lg.bg-primary.py-3{style: "min-height: 80px;"}
+      .container-fluid
+        / Add Toggle Button
+        %button.btn.text-white.border-0{"aria-controls" => "sidebar", "aria-expanded" => "true", "data-bs-target" => "#sidebar", "data-bs-toggle" => "collapse", type: "button"}
+          %i.bi.bi-list.fs-4
+
+        / Centered brand name with larger font
+        .navbar-brand.text-white.position-absolute.start-50.translate-middle-x.fs-3.fw-semibold
+          Sign Language Learning
+          
+        / Right side signup button
+        .ms-auto
+          = link_to "Sign Up", "#", class: "btn btn-outline-light px-4"

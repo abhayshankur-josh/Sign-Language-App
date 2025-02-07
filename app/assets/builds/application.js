@@ -13557,6 +13557,25 @@ var Toast = class _Toast extends BaseComponent {
 };
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
+
+// app/javascript/application.js
+document.addEventListener("DOMContentLoaded", function() {
+  const body = document.body;
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  sidebarToggle.addEventListener("click", function() {
+    body.classList.toggle("sidebar-collapsed");
+  });
+  if (window.innerWidth <= 768) {
+    body.classList.add("sidebar-collapsed");
+  }
+  window.addEventListener("resize", function() {
+    if (window.innerWidth <= 768) {
+      body.classList.add("sidebar-collapsed");
+    } else {
+      body.classList.remove("sidebar-collapsed");
+    }
+  });
+});
 /*! Bundled license information:
 
 @hotwired/turbo/dist/turbo.es2017-esm.js:
