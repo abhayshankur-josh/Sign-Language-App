@@ -27,5 +27,9 @@ class RoleQuery
     @roles.find_by(role_name: "expert").id
   end
 
+  def get_role_id(role_name = "user")
+    @roles.find_by(role_name: role_name).id
+  end
+
   private_class_method :new
 end

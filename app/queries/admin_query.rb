@@ -12,7 +12,14 @@ class AdminQuery
     @admins = User.where(role_id: admin_id)
   end
 
+  def add_admin(admin)
+    admin[:role_id] = RoleQuery.instance.get_admin_id
+    User.create!(admin)
+  end
 
+  def get_user(id)
+    @users.find(id)
+  end
 
   private_class_method :new
 end

@@ -32,13 +32,12 @@ p "Created #{Role.count} Roles."
 # Seeding data for User Table
 User.destroy_all
 
-User.create!([
-  {
+User.create!(
     full_name: "Admin Abhay",
     email: "admin@gmail.com",
-    password: "abhay123",
-    role_id: 03
-  }
-])
+    password: "admin1234",
+    password_confirmation: "admin1234",
+    role_id: 3
+  )
 
 p "Created #{User.count} Users."
