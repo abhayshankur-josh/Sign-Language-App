@@ -113,7 +113,6 @@ GEM
       responders
       warden (~> 1.2.3)
     drb (2.2.1)
-    error_highlight (0.7.0)
     erubi (1.13.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -327,7 +326,6 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 4.9)
-  error_highlight (>= 0.4.0)
   haml (~> 6.3)
   importmap-rails
   jbuilder
