@@ -1,26 +1,7 @@
-
-<% content_for :title, "New admin" %>
-
-<%= render "header" %>
-<%#= render "sidebar" %>
-
-<%# <section class="container-fluid"> %>
-  <%#= render "form", admin: @admin %>
-<%# </section> %>
-
-<section class="main-content">
+<section class="content">
   <div class="container mt-5 mb-5">
-      <h2 class="mb-4">Add New User</h2>
+      <h2 class="mb-4">Invite New User</h2>
       <div class="row d-flex justify-content-around">
-        <!--
-          <div class="col-md-4 text-center mb-3">
-              <div class="card shadow-sm p-3 d-flex align-items-center">
-                  <%= image_tag 'user-placeholder.svg', class: "rounded-circle mb-3", alt: "Profile Picture", size: "200" %>
-                  <p>JPG or PNG no larger than 5 MB.</p>
-                  <button class="btn btn-primary">Upload new image</button>
-              </div>
-          </div>
-        -->
           <div class="col">
             <div class="card shadow-sm p-4">
                 <form>
@@ -42,14 +23,11 @@
                       </select>
                   </div>
                   <button type="submit" class="btn btn-primary ">
-                      <i class="bi bi-person-plus"></i> Add User
+                      <i class="bi bi-person-plus"></i> Invite User
                   </button>
                 </form>
             </div>
           </div>
       </div>
   </div>
-
 </section>
-  
-<%= render "/shared/footer" %>

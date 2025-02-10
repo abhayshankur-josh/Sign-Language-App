@@ -9,5 +9,5 @@
 #
 class Video < ApplicationRecord
   validate :video_path, presence: true
-  belongs_to :sign
+  has_one :sign
 end

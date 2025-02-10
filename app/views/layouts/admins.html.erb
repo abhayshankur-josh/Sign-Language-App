@@ -21,7 +21,11 @@
 
   <body>
 
-      <%= yield %>
+
+    <%= render "admins/sidebar"%>
+    <%= render "admins/main_content" do%>
+        <% yield%>
+    <% end %>
 
   </body>
 </html>

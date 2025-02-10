@@ -1,6 +1,5 @@
 class RoleQuery
-  # Class-level instance variable to hold the single instance
-  @instance = nil
+  attr_reader :roles
 
   # Class method to return the single instance
   def self.instance
@@ -9,10 +8,6 @@ class RoleQuery
 
   def initialize
     @roles = Role.all
-  end
-
-  def select_all
-    @roles
   end
 
   def get_admin_id
@@ -29,6 +24,10 @@ class RoleQuery
 
   def get_role_id(role_name = "user")
     @roles.find_by(role_name: role_name).id
+  end
+
+  def get_role_name(role_id)
+    @roles.find(role_id).role_name.humanize
   end
 
   private_class_method :new

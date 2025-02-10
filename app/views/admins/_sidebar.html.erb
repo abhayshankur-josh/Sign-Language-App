@@ -1,56 +1,24 @@
-<aside>
-  <nav>
-    <ul class="list-unstyled">
-      <li class="mb-4">
-        <span class="fw-bold text-secondary">CORE</span>
-        <ul class="list-unstyled">
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Dashboards</a>
-          </li>
-        </ul>
-      </li>
-      <li class="mb-4">
-        <span class="fw-bold text-secondary">CUSTOM</span>
-        <ul class="list-unstyled">
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Pages</a>
-          </li>
-          <li class="mt-2">
-            <a href="#" class="text-primary text-decoration-none">Applications</a>
-          </li>
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Flows</a>
-          </li>
-        </ul>
-      </li>
-      <li class="mb-4">
-        <span class="fw-bold text-secondary">UI TOOLKIT</span>
-        <ul class="list-unstyled">
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Layout</a>
-          </li>
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Components</a>
-          </li>
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Utilities</a>
-          </li>
-        </ul>
-      </li>
-      <li class="mb-4">
-        <span class="fw-bold text-secondary">PLUGINS</span>
-        <ul class="list-unstyled">
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Charts</a>
-          </li>
-          <li class="mt-2">
-            <a href="#" class="text-dark text-decoration-none">Tables</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-  <div class="position-absolute" style="bottom: 20px; width: 100%; text-align: center; color: #6c757d;">
-    Logged in as: <br> Valerie Luna
-  </div>
-</aside>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <%= image_tag "profile-5.png", alt: "admin-profile", class: "logo-circle" %>
+        <h5 class="mb-0"><%= current_user.full_name || "Default Admin" %></h5>
+    </div>
+
+    <nav class="mt-4">
+        <div class="nav flex-column">
+            <%= link_to admins_dashboard_path, {class: "nav-link"} do%>
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            <% end %>
+            <%= link_to admins_users_path, {class: "nav-link"} do%>
+                <i class="bi bi-people me-2"></i>Users
+            <% end %>
+            <%= link_to admins_videos_path, {class: "nav-link"} do%>
+                <i class="bi bi-play-circle me-2"></i>Videos
+            <% end %>
+        </div>
+    </nav>
+
+    <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "logout-btn" %>
+</div>

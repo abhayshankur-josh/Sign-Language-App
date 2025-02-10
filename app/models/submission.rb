@@ -23,6 +23,7 @@
 #
 class Submission < ApplicationRecord
   validates :sign_id, :submitted_by, :approved_by, presence: true
-  has_many :user
-  has_many :sign
+  belongs_to :user, class_name: "user", foreign_key: "submitted_by"
+  belongs_to :user, class_name: "user", foreign_key: "approved_by"
+  belongs_to :sign, class_name: "sign", foreign_key: "sign_id"
 end

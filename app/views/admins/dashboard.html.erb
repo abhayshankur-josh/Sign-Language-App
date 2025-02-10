@@ -1,0 +1,62 @@
+
+<!-- Table Section -->
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="stat-card">
+        <h6 class="text-muted mb-3">Total Users</h6>
+        <h3 class="mb-0"><%= @users.count %></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+        <h6 class="text-muted mb-3">Total Videos</h6>
+        <h3 class="mb-0"><%= @videos.count %></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+        <h6 class="text-muted mb-3">Active Signs</h6>
+        <h3 class="mb-0"><%= @signs.count %></h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+        <h6 class="text-muted mb-3">Submissions</h6>
+        <h3 class="mb-0"><%= @submissions.count %></h3>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title mb-4">Recent Users</h5>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @users.each do |user| %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.full_name %></td>
+                        <td><%= user.email %></td>
+                        <td><span class="badge bg-primary"><%= RoleQuery.instance.get_role_name(user.role_id) %></span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
