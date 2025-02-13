@@ -2,7 +2,10 @@
 #
 
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Root path
@@ -19,10 +22,10 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   # Define resorces
-  # resources :users
+  resources :users
   # resources :admins , only: [:, :dashboard, :userlist]
   get "/admins/dashboard", to: "admins#dashboard"
   get "/admins/users", to: "admins#users_tab"
+  post "/admins/user", to: "admins#create_user"
   get "/admins/videos", to: "admins#videos_tab"
-  get "/admins/new-user", to: "admins#add_user_tab"
 end

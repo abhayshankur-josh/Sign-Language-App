@@ -4,14 +4,22 @@
             <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
                 <div class="text-center my-5">
                   <%= image_tag("logo.ico", alt: "logo", width: "100") %>
-                  <h3>GestureGuide</h3>
-                  <p>Transforming Hands into Voices</p>
+                  <h3><%= APP_NAME%></h3>
+                  <p><%= APP_SLOGAN%></p>
                 </div>
                 <div class="card shadow-lg">
                     <div class="card-body p-5">
                         <h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
                         <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'needs-validation', autocomplete: 'off' }) do |f| %>
                             <%= render "devise/shared/error_messages", resource: resource %>
+                            <div class="mb-3">
+                                <%= f.label :full_name, 'User Name', class: 'mb-2 text-muted' %>
+                                <%= f.text_field :full_name, autofocus: true, autocomplete: "name", class: 'form-control', required: true %>
+                                <div class="invalid-feedback">
+                                    User Name is invalid
+                                </div>
+                            </div>
+
                             <div class="mb-3">
                                 <%= f.label :email, 'E-Mail Address', class: 'mb-2 text-muted' %>
                                 <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', required: true %>

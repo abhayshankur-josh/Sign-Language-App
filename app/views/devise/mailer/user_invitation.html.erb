@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Welcome to <%= APP_NAME %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        color: #333333;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 600px;
+      }
+      a {
+        color: #1a73e8;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .bold {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>Hi <%= @user.full_name %>,</p>
+      <p>Welcome to <%= APP_NAME %>! We're excited to have you on board.</p>
+      <p>To get started, <%=link_to "please click this link to set your password", edit_user_password_url(reset_password_token: @token), html_options = { class: "bold" } %>.</p>
+      <p>You have six hours to set your password. If you run into any issues, please email us at <a href="<%= "mailto:#{Rails.application.credentials.gmail[:email]}" %>"><%= Rails.application.credentials.gmail[:email] %></a>. Our Support Team is here to help.</p>
+      <p>Thank you, and once again, welcome!</p>
+      <p>Best regards,</p>
+      <p>The <%= APP_NAME %> Team</p>
+    </div>  
+  </body>
+</html>

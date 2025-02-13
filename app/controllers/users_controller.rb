@@ -8,6 +8,6 @@ class UsersController < ApplicationController
   private
 
   def user_query_class
-    @user_query_class ||= UserQuery.new
+    @user_query_class ||= UserQuery.instance
   end
 end
