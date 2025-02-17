@@ -7,8 +7,11 @@ class UserMailer < Devise::Mailer
 
     def user_invitation(user)
         @user = user
-        create_reset_password_token(user)
-        mail(to: @user.email, subject: "Welcome to the #{APP_NAME}")
+        if create_reset_password_token(user)
+            mail_status = mail(to: @user.email, subject: "Welcome to the #{APP_NAME}")
+        else
+            raise StandardError.new("Failed to send mail")
+        end
     end
 
     private

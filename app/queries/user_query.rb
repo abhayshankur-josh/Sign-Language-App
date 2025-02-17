@@ -14,13 +14,16 @@ class UserQuery
     user[:role_id] = RoleQuery.instance.get_role_id(role_name)
     # User.create!(user)
     user.save!
+    user
   rescue StandardError => e
     puts "Error: #{e.full_message}"
   end
 
-  def create_user(email, password = "defaultpass", full_name, role_name)
-    user = User.new(email: email, password: password, full_name: full_message)
+  def create_user(email, full_name, role_name, password = "defaultpass")
+    user = User.new(email: email, password: password, full_name: full_name)
     add_user(user, role_name)
+  rescue StandardError => e
+    e.full_message
   end
 
   def get_user(id)

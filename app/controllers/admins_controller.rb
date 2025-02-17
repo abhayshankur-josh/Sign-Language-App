@@ -10,14 +10,24 @@ class AdminsController < ApplicationController
   end
 
   def create_user
-    @user = UserQuery.create_user(email: @params.userEmail, full_message: @params.userName, role_name: @params.userRole)
-    UserMailer.user_invitation(@user).deliver_now
-  rescue StandardError => e
-    render json: { error: e.full_message }, status: :expectation_failed
+    begin
+      email = @params[:userEmail]
+      full_name = @params[:userName]
+      role_name = @params[:userRole]
+      ActiveRecord::Base.transaction do
+        @user = UserQuery.instance.create_user(email, full_name, role_name)
+        UserMailer.user_invitation(@user).deliver_now
+        flash[:message] = "Your message has been sent successfully."
+      end
+    rescue StandardError => e
+      flash[:message] = "#{e.full_message}"
+    end
+    redirect_to admins_users_path
   end
 
   def videos_tab
   end
+
 
   private
 
@@ -29,7 +39,7 @@ class AdminsController < ApplicationController
   end
 
   def proc_params
-    @params = params.permit(:userName, :userEmail, :userRole)
+    @params = params.permit(:authenticity_token, :userName, :userEmail, :userRole)
   rescue Exception => e
     render json: { error: e.full_message }, status: :expectation_failed
   end

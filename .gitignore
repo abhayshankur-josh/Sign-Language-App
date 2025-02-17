@@ -93,3 +93,7 @@ yarn-debug.log*
 /public/fonts/*
 /public/fonts/*
 \!/public/fonts/.keep
+
+
+# Custom
+config/initializers/filter_parameter_logging.rb

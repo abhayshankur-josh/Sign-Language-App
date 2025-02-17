@@ -1,4 +1,16 @@
 <!-- User List -->
+
+<% flash.each do |key, value| %>
+  <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        <%= value %>
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+<% end %>
+
 <div class="container-fluid py-4">
     <div class="card">
       <div class="card-body">
@@ -97,27 +109,16 @@
           <div class="mb-3">
             <%= form.label :userName, "Full Name", class: "form-label" %>
             <%= form.text_field :userName, class: "form-control", id: "userName", placeholder: "Enter user's full name", required: true %>
-            <%# <label for="userName" class="form-label">Full Name</label>
-            <input type="text" name="userName" class="form-control" id="userName" placeholder="Enter user's full name" required> %>
           </div>
 
           <!-- Email Field -->
           <div class="mb-3">
             <%= form.label :userEmail, "Email Address", class: "form-label" %>
             <%= form.email_field :userEmail, class: "form-control", id: "userEmail", placeholder: "Enter user's email address", required: true %>
-            <%# <label for="userEmail" class="form-label">Email Address</label>
-            <input type="email" name="userEmail" class="form-control" id="userEmail" placeholder="Enter user's email address" required> %>
           </div>
 
           <!-- Role Field -->
           <div class="mb-3">
-            <%# <label for="userRole" class="form-label">Role</label>
-            <select class="form-select" name="userRole" id="userRole" required>
-              <option value="" selected disabled>Select user role</option>
-              <option value="user">Regular User</option>
-              <option value="expert">Expert</option>
-              <option value="admin">Administrator</option>
-            </select> %>
             <%= form.label :userRole, "Role", class: "form-label" %>
             <%= form.select :userRole, 
                 options_for_select([['Regular User', 'user'], ['Expert', 'expert'], ['Administrator', 'admin']], selected: ''), 
