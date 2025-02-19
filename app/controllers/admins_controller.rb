@@ -11,9 +11,9 @@ class AdminsController < ApplicationController
 
   def create_user
     begin
-      email = @params[:userEmail]
-      full_name = @params[:userName]
-      role_name = @params[:userRole]
+      email = @user_params[:userEmail]
+      full_name = @user_params[:userName]
+      role_name = @user_params[:userRole]
       ActiveRecord::Base.transaction do
         @user = UserQuery.instance.create_user(email, full_name, role_name)
         UserMailer.user_invitation(@user).deliver_now
@@ -26,6 +26,11 @@ class AdminsController < ApplicationController
   end
 
   def videos_tab
+    @current_email = current_user.email
+  end
+
+  def form_videos
+    puts "Forms upload: #{params}"
   end
 
 
@@ -39,7 +44,7 @@ class AdminsController < ApplicationController
   end
 
   def proc_params
-    @params = params.permit(:authenticity_token, :userName, :userEmail, :userRole)
+    @user_params = params.permit(:authenticity_token, :userName, :userEmail, :userRole)
   rescue Exception => e
     render json: { error: e.full_message }, status: :expectation_failed
   end

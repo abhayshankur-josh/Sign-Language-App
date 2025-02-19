@@ -28,4 +28,5 @@ Rails.application.routes.draw do
   get "/admins/users", to: "admins#users_tab"
   post "/admins/user", to: "admins#create_user"
   get "/admins/videos", to: "admins#videos_tab"
+  post "/admins/video", to: "admins#form_videos"
 end

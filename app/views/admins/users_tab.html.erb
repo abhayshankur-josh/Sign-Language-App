@@ -93,47 +93,4 @@
     </div>
 </div>
 
-<!-- Invite User Modal -->
-<div class="modal fade" id="inviteUserModal" tabindex="-1" aria-labelledby="inviteUserModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="inviteUserModalLabel">
-          <i class="bi bi-person-plus me-2"></i>Invite New User
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <%= form_with(url: admins_user_path, method: :post, id: "inviteUserForm") do |form| %>
-      <div class="modal-body">
-          <!-- Name Field -->
-          <div class="mb-3">
-            <%= form.label :userName, "Full Name", class: "form-label" %>
-            <%= form.text_field :userName, class: "form-control", id: "userName", placeholder: "Enter user's full name", required: true %>
-          </div>
-
-          <!-- Email Field -->
-          <div class="mb-3">
-            <%= form.label :userEmail, "Email Address", class: "form-label" %>
-            <%= form.email_field :userEmail, class: "form-control", id: "userEmail", placeholder: "Enter user's email address", required: true %>
-          </div>
-
-          <!-- Role Field -->
-          <div class="mb-3">
-            <%= form.label :userRole, "Role", class: "form-label" %>
-            <%= form.select :userRole, 
-                options_for_select([['Regular User', 'user'], ['Expert', 'expert'], ['Administrator', 'admin']], selected: ''), 
-                { include_blank: 'Select user role', required: true }, 
-                class: 'form-select', 
-                id: 'userRole' %>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" form="inviteUserForm" class="btn btn-invite">
-          <i class="bi bi-send me-2"></i>Send Invitation
-        </button>
-      </div>
-      <% end %>
-    </div>
-  </div>
-</div>
+<%= render "admins/partials/invite_user_modal" %>

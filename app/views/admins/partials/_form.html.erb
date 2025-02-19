@@ -1,0 +1,67 @@
+<section class="vh-100" style="background-color:rgba(95, 95, 95, 0.5);">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-9">
+
+        <h1 class="text-white mb-4">Submit a Video</h1>
+        <%= form_with(url: admins_video_path, method: :post) do |form| %>
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body">
+            
+              <div class="row align-items-center pt-4 pb-3">
+                <div class="col-md-3 ps-5">
+                  <%= form.label :title, "Action title", class: "mb-0" %>
+                </div>
+                <div class="col-md-9 pe-5">
+                  <%= form.text_field :title, class: "form-control form-control-lg", placeholder: "A Word defining the action", required: true%>
+                </div>
+              </div>
+                 
+              <hr class="mx-n3">
+              
+              <div class="row align-items-center py-3">
+                <div class="col-md-3 ps-5">
+                  <%= form.label :email, "Email address", class: "mb-0" %>
+                </div>
+                <div class="col-md-9 pe-5">
+                  <%= form.text_field :email, value: @current_email, class: "form-control form-control-lg", disabled: true %>
+                </div>
+              </div>
+              
+              <hr class="mx-n3">
+              
+              <div class="row align-items-center py-3">
+                <div class="col-md-3 ps-5">
+                  <%= form.label :description, "Action description", class: "mb-0" %>
+                </div>
+                <div class="col-md-9 pe-5">
+                  <%= form.text_area :description, class: "form-control", rows: 3, placeholder: "An action describing the word or set of words.", required: true %>
+                </div>
+              </div>
+              
+              <hr class="mx-n3">
+              
+              <div class="row align-items-center py-3">
+                <div class="col-md-3 ps-5">
+                  <%= form.label :file, "Upload file", class: "mb-0" %>
+                </div>
+                <div class="col-md-9 pe-5">
+                  <%= form.file_field :file, class: "form-control form-control-lg", required: true %>
+                  <div class="small text-muted mt-2">Upload the recorded action or any other relevant file. Max file size 50 MB</div>
+                </div>
+              </div>
+              
+              <hr class="mx-n3">
+              
+              <div class="px-5 py-4">
+                <%= form.submit 'Upload', data: { mdb_button_init: true, mdb_ripple_init: true } , class: "btn btn-primary btn-lg" %>
+              </div>
+              
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</section>
