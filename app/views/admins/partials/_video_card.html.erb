@@ -1,0 +1,18 @@
+<div class="col-lg-4 col-md-6 mb-4">
+    <div class="card shadow h-100 video-card" data-video-id=<%= sign.id || "0" %> data-bs-toggle="modal" data-bs-target="#videoDetailModal">
+        <!-- Video Stream Area -->
+        <div class="ratio ratio-16x9">
+            <video class="card-img-top" controls>
+                <source src=<%= url_for(sign.video_path) %> type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="card-title mb-0 text-truncate"> <%= sign.title || "Video Title" %> </h5>
+                <span class="badge <%= helper_status_code(sign.status) %> rounded-pill ms-2"><%= sign.status.capitalize || "Status" %></span>
+            </div>
+        </div>
+    </div>
+</div>

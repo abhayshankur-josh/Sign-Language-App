@@ -1,22 +1,25 @@
 class VideoQuery
+  attr_reader :videos
   # Class method to return the single instance
   def self.instance
     @instance ||= new
   end
 
   def initialize
-    @users ||= Video.all
+    @videos ||= Video.all
   end
 
   def upload_video(clip, thumbnail = nil)
     video = Video.new
-    # Attach the video clip and thumbnail
+    # Attach the video clip
     video.video_clip.attach(clip)
-    video.video_thumbnail.attach(thumbnail) if thumbnail&.nonzero?
-
-    # You might not need to manually set video_path here
-    video.save!  # Save the video after attaching files
+    # Attach the thumbnail if it's present
+    video.video_thumbnail.attach(thumbnail) if thumbnail.present?
+    # Save the video after attaching files
+    video.save!
     video
+  rescue Exception => e
+    Rails.logger.warn "LOG WARNING: #{e.full_message}"
   end
 
   def create_record(clip, thumbnail = nil)
@@ -24,7 +27,9 @@ class VideoQuery
 
     # Now that video is saved and attachments are in place, you can set video_path
     video.update!(video_path: Rails.application.routes.url_helpers.rails_blob_path(video.video_clip, only_path: true))
-    video
+    video.id
+  rescue Exception => e
+    Rails.logger.warn "LOG WARNING: #{e.full_message}"
   end
 
   private_class_method :new

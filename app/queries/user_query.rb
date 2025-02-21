@@ -23,11 +23,18 @@ class UserQuery
     user = User.new(email: email, password: password, full_name: full_name)
     add_user(user, role_name)
   rescue StandardError => e
-    e.full_message
+    Rails.logger.warn "LOG WARNING: #{e.full_message}"
   end
 
   def get_user(id)
     @users.find(id)
+  end
+
+  def get_user_id(email)
+    user = @users.find_by(email: email)
+    user&.id
+  rescue Exception => e
+    Rails.logger.warn "LOG WARNING: #{e.full_message}"
   end
 
   private_class_method :new

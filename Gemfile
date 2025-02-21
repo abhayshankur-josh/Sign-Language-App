@@ -81,3 +81,5 @@ gem "jsbundling-rails", "~> 1.3"
 gem "devise", "~> 4.9"
 
 gem "image_processing", ">= 1.2"
+
+gem "byebug", "~> 11.1", groups: [ :development, :test ]

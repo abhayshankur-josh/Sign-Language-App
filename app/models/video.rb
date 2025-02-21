@@ -13,5 +13,5 @@ class Video < ApplicationRecord
 
   validates :video_clip, presence: true
 
-  has_one :sign
+  has_one :sign, dependent: :destroy
 end

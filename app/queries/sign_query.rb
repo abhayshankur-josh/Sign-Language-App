@@ -10,19 +10,23 @@ class SignQuery
     @signs = Sign.all
   end
 
-  def add_sign(title, description, video_clip, video_thumbnail = nil)
-    ActiveRecord::Base.transaction do
-      # Create a Video Record.
-      video = VideoQuery.instance.create_record(video_clip, video_thumbnail)
+  def add_sign(title, description, videoId)
+    # Create a Sign Record.
+    sign = Sign.new
+    sign.title = title
+    sign.description = description
+    sign.status = "pending"
+    sign.video_id = videoId
+    sign.save!
+    sign.id
+  rescue Exception => e
+    Rails.logger.error "LOG WARNING: #{e.full_message}"
+  end
 
-      # Create a Sign Record.
-      sign = Sign.new
-      sign.title = title
-      sign.description = description
-      sign.status = "pending"
-      sign.video_id = video.id
-      sign.save!
-    end
+  def generate_signs_with_videos
+    @signs.joins(:video).select("signs.id, signs.title, signs.description, signs.status, videos.*")
+  rescue Exception => e
+    Rails.logger.error "LOG WARNING: SQL ERROR - #{e.full_message}"
   end
 
   private_class_method :new

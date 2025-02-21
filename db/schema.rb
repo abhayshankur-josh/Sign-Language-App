@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_17_112123) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_21_082526) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -48,7 +48,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_112123) do
   create_table "signs", force: :cascade do |t|
     t.string "title"
     t.text "description"
-    t.string "status"
+    t.integer "status"
     t.integer "video_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -57,13 +57,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_112123) do
 
   create_table "submissions", force: :cascade do |t|
     t.integer "sign_id"
-    t.integer "submitted_by"
-    t.integer "approved_by"
+    t.integer "submitted_by_id"
+    t.integer "approved_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["approved_by"], name: "index_submissions_on_approved_by"
+    t.index ["approved_by_id"], name: "index_submissions_on_approved_by_id"
     t.index ["sign_id"], name: "index_submissions_on_sign_id"
-    t.index ["submitted_by"], name: "index_submissions_on_submitted_by"
+    t.index ["submitted_by_id"], name: "index_submissions_on_submitted_by_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -94,7 +94,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_112123) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "signs", "videos"
   add_foreign_key "submissions", "signs"
-  add_foreign_key "submissions", "users", column: "approved_by"
-  add_foreign_key "submissions", "users", column: "submitted_by"
+  add_foreign_key "submissions", "users", column: "approved_by_id"
+  add_foreign_key "submissions", "users", column: "submitted_by_id"
   add_foreign_key "users", "roles"
 end

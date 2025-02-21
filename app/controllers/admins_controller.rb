@@ -1,7 +1,10 @@
 class AdminsController < ApplicationController
+  include AdminsHelper
+
   before_action :authenticate_user!
-  before_action :init_values, expect: [ :create_user ]
+  before_action :init_values, only: [ :dashboard, :users_tab, :videos_tab ]
   before_action :proc_params, only: [ :create_user ]
+  before_action :upload_params, only: [ :form_videos ]
 
   def dashboard
   end
@@ -17,21 +20,38 @@ class AdminsController < ApplicationController
       ActiveRecord::Base.transaction do
         @user = UserQuery.instance.create_user(email, full_name, role_name)
         UserMailer.user_invitation(@user).deliver_now
-        flash[:message] = "Your message has been sent successfully."
+        flash[:success] = "Mail has been sent successfully."
       end
     rescue StandardError => e
-      flash[:message] = "#{e.full_message}"
+      flash[:error] = "#{e.full_message}"
     end
     redirect_to admins_users_path
   end
 
   def videos_tab
     @current_email = current_user.email
+    @signs_view = SignQuery.instance.generate_signs_with_videos
   end
 
   def form_videos
-    puts "Forms upload: #{params}"
+    ActiveRecord::Base.transaction do
+      videoId = VideoQuery.instance.create_record(@video_params[:videoFile], @video_params[:thumbnailFile])
+      signId = SignQuery.instance.add_sign(@video_params[:videoTitle], @video_params[:videoDescription], videoId)
+      publisherId = UserQuery.instance.get_user_id(@video_params[:publisherEmail])
+      submissionId = SubmissionQuery.instance.add_submission(publisherId, signId)
+      if submissionId
+        flash[:success] = "Uploaded Successfully"
+        Rails.logger.info "Uploaded Successfully"
+      else
+        flash[:warning] = "Upload failed."
+        Rails.logger.info "Upload failed."
+      end
+    end
+    redirect_to admins_videos_path
+  rescue Exception => e
+    Rails.logger.error "ERROR: #{e.full_message}"
   end
+
 
 
   private
@@ -39,12 +59,18 @@ class AdminsController < ApplicationController
   def init_values
     @users = UserQuery.instance.users
     @signs = SignQuery.instance.signs
-    @videos = SignQuery.instance.signs
-    @submissions = SignQuery.instance.signs
+    @videos = VideoQuery.instance.videos
+    @submissions = SubmissionQuery.instance.submissions
   end
 
   def proc_params
     @user_params = params.permit(:authenticity_token, :userName, :userEmail, :userRole)
+  rescue Exception => e
+    render json: { error: e.full_message }, status: :expectation_failed
+  end
+
+  def upload_params
+    @video_params = params.permit(:videoFile, :thumbnailFile, :videoTitle, :videoDescription, :publisherEmail)
   rescue Exception => e
     render json: { error: e.full_message }, status: :expectation_failed
   end

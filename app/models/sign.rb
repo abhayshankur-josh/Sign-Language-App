@@ -4,7 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  description :text
-#  status      :string
+#  status      :integer
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

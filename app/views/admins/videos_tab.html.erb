@@ -1,1 +1,280 @@
-<%= render partial: 'admins/partials/form' %>
+<%#= render partial: 'admins/partials/form' %>
+
+<section class="video-signs-section py-5">
+  <div class="container-fluid">
+    <!-- Header and Toolbar -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+          <!-- Section Header -->
+          <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold mb-0">Signs</h2>
+            <p class="text-muted mb-0">Browse and manage your video content</p>
+          </div>
+          
+          <!-- Toolbar -->
+          <div class="d-flex flex-wrap align-items-center">
+            <!-- Filter Dropdown -->
+            <div class="dropdown me-2 mb-2 mb-md-0">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortByDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-sort me-2"></i>Sort by
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="sortByDropdown">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-clock me-2"></i>Newest First</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i>Oldest First</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Most Viewed</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-star me-2"></i>Highest Rated</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-filter me-2"></i>Active Only</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-hourglass-half me-2"></i>Processing Only</a></li>
+              </ul>
+            </div>
+            
+            <!-- Upload Button -->
+            <button 
+              class="btn btn-primary" 
+              data-bs-toggle="modal" 
+              data-bs-target="#uploadVideoModal">
+              <i class="fas fa-upload me-2"></i>Upload New Sign
+            </button>
+          </div>
+        </div>
+        <hr class="my-3">
+      </div>
+    </div>
+
+    <!-- Video Grid Layout -->
+    <div class="row">
+      <% @signs_view.each do |sign| %>
+        <%= render partial: "admins/partials/video_card", locals: { sign: sign } %>
+      <% end %>
+
+
+      <!-- Video Card 1 -->
+      <%# <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow h-100 video-card" data-video-id="1" data-toggle="modal" data-target="#videoDetailModal">
+          <!-- Video Stream Area -->
+          <div class="ratio ratio-16x9">
+            <video class="card-img-top" controls>
+              <source src="https://example.com/video1.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="card-title mb-0 text-truncate">ASL Greeting Signs</h5>
+              <span class="badge bg-success rounded-pill ms-2">Active</span>
+            </div>
+          </div>
+        </div>
+      </div> %>
+
+      <!-- Video Card 2 -->
+      <%# <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow h-100 video-card" data-video-id="2" data-toggle="modal" data-target="#videoDetailModal">
+          <div class="ratio ratio-16x9">
+            <video class="card-img-top" controls>
+              <source src="https://example.com/video2.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="card-title mb-0 text-truncate">Emergency Medical Signs</h5>
+              <span class="badge bg-warning rounded-pill ms-2">Processing</span>
+            </div>
+          </div>
+        </div>
+      </div> %>
+
+      <!-- Video Card 3 -->
+      <%# <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow h-100 video-card" data-video-id="3" data-toggle="modal" data-target="#videoDetailModal">
+          <div class="ratio ratio-16x9">
+            <video class="card-img-top" controls>
+              <source src="https://example.com/video3.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="card-title mb-0 text-truncate">Common Travel Expressions</h5>
+              <span class="badge bg-danger rounded-pill ms-2">Archived</span>
+            </div>
+          </div>
+        </div>
+      </div> %>
+
+      <!-- Video Card 4 -->
+      <%# <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card shadow h-100 video-card" data-video-id="4" data-toggle="modal" data-target="#videoDetailModal">
+          <div class="ratio ratio-16x9">
+            <video class="card-img-top" controls>
+              <source src="https://example.com/video4.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="card-title mb-0 text-truncate">Family Relationship Signs</h5>
+              <span class="badge bg-success rounded-pill ms-2">Active</span>
+            </div>
+          </div>
+        </div>
+      </div> %>
+      
+    </div>
+  </div>
+</section>
+
+<%= render "admins/partials/video_detail_modal"%>
+
+<%= render "admins/partials/upload_video_modal" %>
+
+<!-- JavaScript to handle modal data population -->
+<%# <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sample video data (in a real application, this would come from your backend)
+    const videoData = {
+      "1": {
+        title: "ASL Greeting Signs",
+        status: "Active",
+        views: "1,245",
+        date: "Feb 12, 2025",
+        description: "This video demonstrates common greeting signs in American Sign Language. It includes 'hello', 'good morning', 'how are you', and 'nice to meet you'.",
+        creator: {
+          name: "John Smith",
+          info: "Sign Language Instructor • 10.5K Followers",
+          avatar: "/api/placeholder/50/50"
+        },
+        tags: ["asl", "beginner", "greeting", "everyday"],
+        category: "Conversational",
+        duration: "00:32",
+        quality: "1080p HD",
+        videoUrl: "https://example.com/video1.mp4"
+      },
+      "2": {
+        title: "Emergency Medical Signs",
+        status: "Processing",
+        views: "876",
+        date: "Feb 15, 2025",
+        description: "Essential signs for emergency medical situations. These signs can help communicate critical information when time is of the essence.",
+        creator: {
+          name: "Emily Johnson",
+          info: "Medical Interpreter • 8.7K Followers",
+          avatar: "/api/placeholder/50/50"
+        },
+        tags: ["emergency", "medical", "hospital", "urgent"],
+        category: "Medical",
+        duration: "01:15",
+        quality: "720p HD",
+        videoUrl: "https://example.com/video2.mp4"
+      },
+      "3": {
+        title: "Common Travel Expressions",
+        status: "Archived",
+        views: "2,341",
+        date: "Jan 28, 2025",
+        description: "Learn useful sign language expressions for traveling. This video covers signs for directions, transportation, accommodations, and basic questions.",
+        creator: {
+          name: "Michael Chen",
+          info: "Travel Blogger • 15.2K Followers",
+          avatar: "/api/placeholder/50/50"
+        },
+        tags: ["travel", "international", "directions", "transportation"],
+        category: "Travel",
+        duration: "02:10",
+        quality: "1080p HD",
+        videoUrl: "https://example.com/video3.mp4"
+      },
+      "4": {
+        title: "Family Relationship Signs",
+        status: "Active",
+        views: "987",
+        date: "Feb 18, 2025",
+        description: "This video demonstrates signs for different family relationships including parents, siblings, grandparents, cousins, and extended family.",
+        creator: {
+          name: "Sarah Kim",
+          info: "ASL Teacher • 12.8K Followers",
+          avatar: "/api/placeholder/50/50"
+        },
+        tags: ["family", "relationships", "asl", "intermediate"],
+        category: "Educational",
+        duration: "01:45",
+        quality: "1080p HD",
+        videoUrl: "https://example.com/video4.mp4"
+      }
+    };
+    
+    // Get all video cards
+    const videoCards = document.querySelectorAll('.video-card');
+    
+    // Add click event to each card
+    videoCards.forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Get video ID from data attribute
+        const videoId = this.getAttribute('data-video-id');
+        const video = videoData[videoId];
+        
+        if (!video) return;
+        
+        // Populate modal with video data
+        document.getElementById('modalVideoTitle').textContent = video.title;
+        document.getElementById('modalVideoStatus').textContent = video.status;
+        document.getElementById('modalVideoStatus').className = `badge rounded-pill ${getStatusClass(video.status)}`;
+        document.getElementById('modalVideoViews').textContent = `${video.views} views`;
+        document.getElementById('modalVideoDate').textContent = `Uploaded on ${video.date}`;
+        document.getElementById('modalVideoDescription').textContent = video.description;
+        document.getElementById('modalCreatorName').textContent = video.creator.name;
+        document.getElementById('modalCreatorInfo').textContent = video.creator.info;
+        document.getElementById('modalCreatorAvatar').src = video.creator.avatar;
+        document.getElementById('modalVideoCategory').textContent = video.category;
+        document.getElementById('modalVideoDuration').textContent = video.duration;
+        document.getElementById('modalVideoQuality').textContent = video.quality;
+        
+        // Set video source
+        document.getElementById('modalVideoSource').src = video.videoUrl;
+        const videoPlayer = document.getElementById('modalVideoPlayer');
+        videoPlayer.load(); // Reload the video element
+        
+        // Clear and populate tags
+        const tagsContainer = document.getElementById('modalVideoTags');
+        tagsContainer.innerHTML = '';
+        video.tags.forEach(tag => {
+          const tagElement = document.createElement('span');
+          tagElement.className = 'badge bg-light text-dark me-2 mb-2';
+          tagElement.textContent = tag;
+          tagsContainer.appendChild(tagElement);
+        });
+      });
+    });
+    
+    // Helper function to get badge class based on status
+    function getStatusClass(status) {
+      switch(status) {
+        case 'Active': return 'bg-success';
+        case 'Processing': return 'bg-warning';
+        case 'Archived': return 'bg-danger';
+        default: return 'bg-secondary';
+      }
+    }
+  });
+</script> %>
+
+<!-- Add custom styles for the video cards and section -->
+<style>
+  .video-signs-section {
+    background-color: #f8f9fa;
+  }
+  
+  .video-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+</style>
