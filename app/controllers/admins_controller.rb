@@ -52,7 +52,11 @@ class AdminsController < ApplicationController
     Rails.logger.error "ERROR: #{e.full_message}"
   end
 
-
+  def card_details
+    @signs_view = SignQuery.instance.generate_signs_with_videos
+    data = @signs_view.find_by(id= params[:sign])
+    render json: data
+  end
 
   private
 

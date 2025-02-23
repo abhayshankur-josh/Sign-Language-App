@@ -29,4 +29,5 @@ Rails.application.routes.draw do
   post "/admins/user", to: "admins#create_user"
   get "/admins/videos", to: "admins#videos_tab"
   post "/admins/video", to: "admins#form_videos"
+  get "/admins/video/:sign", to: "admins#card_details", as: "card_details"
 end
