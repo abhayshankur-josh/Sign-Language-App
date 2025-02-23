@@ -6,12 +6,15 @@ class AdminsController < ApplicationController
   before_action :proc_params, only: [ :create_user ]
   before_action :upload_params, only: [ :form_videos ]
 
+  # GET : /admins/dashboard
   def dashboard
   end
 
+  # GET : /admins/users
   def users_tab
   end
 
+  # POST : /admins/user
   def create_user
     begin
       email = @user_params[:userEmail]
@@ -28,11 +31,12 @@ class AdminsController < ApplicationController
     redirect_to admins_users_path
   end
 
+  # GET : /admins/videos
   def videos_tab
-    @current_email = current_user.email
     @signs_view = SignQuery.instance.generate_signs_with_videos
   end
 
+  # POST : /admins/video
   def form_videos
     ActiveRecord::Base.transaction do
       videoId = VideoQuery.instance.create_record(@video_params[:videoFile], @video_params[:thumbnailFile])
@@ -52,10 +56,28 @@ class AdminsController < ApplicationController
     Rails.logger.error "ERROR: #{e.full_message}"
   end
 
+  # GET : /admins/video/:sign
   def card_details
     @signs_view = SignQuery.instance.generate_signs_with_videos
     data = @signs_view.find_by(id= params[:sign])
     render json: data
+  end
+
+  # GET : /admins/signs
+  def signs_tab
+    respond_to do |format|
+      format.html
+      format.json { render json: SignDatatable.new(params) }
+    end
+  end
+
+  # GET : /admins/submissions
+  def submissions_tab
+    @current_email = current_user.email
+    respond_to do |format|
+      format.html
+      format.json { render json: SubmissionDatatable.new(params) }
+    end
   end
 
   private

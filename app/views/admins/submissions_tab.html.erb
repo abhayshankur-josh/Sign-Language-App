@@ -1,0 +1,94 @@
+<section class="video-submissions-section py-5">
+  <div class="container-fluid">
+    <!-- Header and Toolbar -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+          <!-- Section Header -->
+          <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold mb-0">Submissions</h2>
+            <p class="text-muted mb-0">Browse and manage your sign content</p>
+          </div>
+          
+          <!-- Toolbar -->
+          <div class="d-flex flex-wrap align-items-center">
+            <!-- Filter Dropdown -->
+            <%# <div class="dropdown me-2 mb-2 mb-md-0">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortByDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-sort me-2"></i>Sort by
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="sortByDropdown">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-clock me-2"></i>Newest First</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i>Oldest First</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Most Viewed</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-star me-2"></i>Highest Rated</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-filter me-2"></i>Active Only</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-hourglass-half me-2"></i>Processing Only</a></li>
+              </ul>
+            </div> %>
+            
+            <!-- Upload Button -->
+            <button 
+              class="btn btn-primary" 
+              data-bs-toggle="modal" 
+              data-bs-target="#uploadVideoModal">
+              <i class="fas fa-upload me-2"></i>Upload New Sign
+            </button>
+          </div>
+        </div>
+        <hr class="my-3">
+      </div>
+    </div>
+
+    <!-- Video Grid Layout -->
+    <div class="row">
+      <table id="submissions-datatable" class="table table-hover py-3" data-source="<%= admins_submissions_path(format: :json) %>">
+        <thead>
+          <tr>
+            <th>Submission ID</th>
+            <th>Sign Title</th>
+            <th>Approver</th>
+            <th>Publisher</th>
+            <th>Video</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</section>
+
+<%= render "admins/partials/upload_video_modal" %>
+
+<script> 
+    function loadTable() {
+        var table = document.getElementById("submissions-datatable");
+        
+        if (table) {
+            $(table).DataTable({
+            serverSide: true,
+            ajax: {
+                url: table.dataset.source,
+                type: "GET"
+            },
+            columns: [
+                { data: "id" },
+                { data: "sign_title" },
+                { data: "approver_name" },
+                { data: "publisher_name" },
+                { data: "video_path" },
+                { data: "created_at" },
+                { data: "updated_at" }
+            ]
+            });
+        } else {
+            console.error("Table with id 'submissions-datatable' not found");
+        }
+    }
+    document.addEventListener("DOMContentLoaded", loadTable);
+</script>

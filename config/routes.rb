@@ -24,10 +24,12 @@ Rails.application.routes.draw do
   # Define resorces
   resources :users
   # resources :admins , only: [:, :dashboard, :userlist]
-  get "/admins/dashboard", to: "admins#dashboard"
-  get "/admins/users", to: "admins#users_tab"
+  get  "/admins/dashboard",  to: "admins#dashboard"
+  get  "/admins/users",         to: "admins#users_tab"
   post "/admins/user", to: "admins#create_user"
-  get "/admins/videos", to: "admins#videos_tab"
+  get  "/admins/videos", to: "admins#videos_tab"
   post "/admins/video", to: "admins#form_videos"
-  get "/admins/video/:sign", to: "admins#card_details", as: "card_details"
+  get  "/admins/video/:sign", to: "admins#card_details"
+  get  "/admins/signs", to: "admins#signs_tab"
+  get  "/admins/submissions", to: "admins#submissions_tab"
 end

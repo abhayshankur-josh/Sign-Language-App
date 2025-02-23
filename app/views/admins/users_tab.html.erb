@@ -52,6 +52,7 @@
           <table class="table">
             <thead>
               <tr>
+                <th>Id</th>
                 <th>User</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -62,6 +63,7 @@
             <tbody>
               <% @users.each do |user| %>
               <tr>
+                <td><%= user.id %></td>
                 <td><%= user.full_name%></td>
                 <td><%= user.email %></td>
                 <td><%= RoleQuery.instance.get_role_name(user.role_id) %></td>
