@@ -1,16 +1,8 @@
 class HomeController < ApplicationController
   def index
-    # case current_user.try(&:role_id)
-    # when ADMIN_ROLE_ID
-    #     redirect_to controller: "admins", action: "index"
+  end
 
-    # when EXPERT_ROLE_ID
-    #     # redirect_to controller: "admins", action: "index"
-    #     page_not_found
-
-    # when USER_ROLE_ID
-    #     redirect_to controller: "users", action: "index"
-
-    # end
+  def signs
+    @signs_view = SignQuery.instance.generate_signs_with_videos
   end
 end

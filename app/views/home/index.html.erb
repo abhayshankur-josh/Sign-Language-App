@@ -1,1 +1,141 @@
-<%= render partial:"/shared/navbar" %>
+<!-- index.html.erb -->
+
+<div class="container-fluid p-0">
+  <!-- Hero Section -->
+  <section class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Learn Sign Language</h1>
+      <p class="lead mb-4">Break barriers and connect with the deaf community through our interactive learning platform</p>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <a href=<%= learner_index_path%> class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
+        <a href=<%= signs_path %> class="btn btn-outline-light btn-lg px-4">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Sign Language Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <h2 class="fw-bold">What is Sign Language?</h2>
+          <p class="lead">Sign language is a visual language that uses hand shapes, facial expressions, gestures, and body language to communicate.</p>
+          <p>Unlike spoken languages, sign languages are not universal. Different countries and regions have developed their own sign languages, such as American Sign Language (ASL), British Sign Language (BSL), <strong>Indian Sign Language (ISL)</strong> and many others.</p>
+          <p>Sign languages are complete and complex languages with their own grammar and syntax, capable of expressing any concept that can be expressed in spoken languages.</p>
+        </div>
+        <div class="col-lg-6">
+          <%# <img src="/api/placeholder/600/400" alt="People using sign language" class="img-fluid rounded shadow"> %>
+          <%#= image_tag "2208_w048_n005_294b_p1_294.jpg", alt: "People using sign language", class: "img-fluid rounded shadow"%>
+          <%= image_tag "9756520.jpg", alt: "People using sign language", class: "img-fluid rounded shadow"%>
+          <%#= image_tag "8608652.jpg", alt: "People using sign language", class: "img-fluid rounded shadow"%>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Learn Section -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">Why Learn Sign Language?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-people fs-1 text-primary"></i>
+              </div>
+              <h5 class="card-title">Inclusion</h5>
+              <p class="card-text">Break down communication barriers and make the world more inclusive for the deaf and hard of hearing community.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-lightbulb fs-1 text-primary"></i>
+              </div>
+              <h5 class="card-title">Cognitive Benefits</h5>
+              <p class="card-text">Learning sign language enhances spatial awareness, visual processing skills, and overall cognitive abilities.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div class="mb-3">
+                <i class="bi bi-globe fs-1 text-primary"></i>
+              </div>
+              <h5 class="card-title">Career Opportunities</h5>
+              <p class="card-text">Open doors to careers in interpretation, education, healthcare, and social services where sign language is valuable.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">Our Platform Features</h2>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <i class="bi bi-camera-video text-primary fs-4"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="fw-bold">Interactive Video Lessons</h5>
+              <p>Learn from expert instructors with clear, high-quality video demonstrations of signs and communication techniques.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <i class="bi bi-hand-thumbs-up text-primary fs-4"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="fw-bold">Practice Recognition</h5>
+              <p>Test your knowledge with interactive quizzes and exercises that help you recognize and understand signs.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <i class="bi bi-graph-up text-primary fs-4"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="fw-bold">Progress Tracking</h5>
+              <p>Track your learning journey with detailed progress reports and achievement badges.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <i class="bi bi-people text-primary fs-4"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="fw-bold">Community Support</h5>
+              <p>Connect with other learners and native signers in our supportive community forums and practice sessions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+      <h2 class="fw-bold mb-3">Ready to Start Your Journey?</h2>
+      <p class="lead mb-4">Join thousands of learners who are breaking communication barriers with our platform.</p>
+      <a href=<%= new_user_session_path %> class="btn btn-light btn-lg px-4">Sign Up Today</a>
+    </div>
+  </section>
+
+  <%= render "shared/footer" %>
+</div>

@@ -2,7 +2,6 @@ class SubmissionDatatable < AjaxDatatablesRails::ActiveRecord
   def view_columns
     # Declare strings in this format: ModelName.column_name
     # or in aliased_join_table.column_name format
-    # TODO : Failing on search query.
     @view_columns ||= {
       # id: { source: "User.id", cond: :eq },
       # name: { source: "User.name", cond: :like }
@@ -10,9 +9,9 @@ class SubmissionDatatable < AjaxDatatablesRails::ActiveRecord
       created_at: { source: "Submission.created_at", cond: :like },
       updated_at: { source: "Submission.updated_at", cond: :like },
       approver_id: { source: "Submission.approved_by_id", cond: :eq },
-      approver_name: { source: "Approver.full_name", cond: :like },
+      approver_name: { source: "User.full_name", searchable: false },
       publisher_id: { source: "Submission.submitted_by_id", cond: :eq },
-      publisher_name: { source: "Submitter.full_name", cond: :like },
+      publisher_name: { source: "User.full_name", searchable: false },
       sign_id: { source: "Sign.id", cond: :eq },
       sign_title: { source: "Sign.title", cond: :like },
       video_id: { source: "Sign.video_id", cond: :eq },

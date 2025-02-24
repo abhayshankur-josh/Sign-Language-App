@@ -1,7 +1,8 @@
 class AdminsController < ApplicationController
   include AdminsHelper
 
-  before_action :authenticate_user!
+  # Remove auth except when api is ready.
+  before_action :authenticate_user!, except: :card_details
   before_action :init_values, only: [ :dashboard, :users_tab, :videos_tab ]
   before_action :proc_params, only: [ :create_user ]
   before_action :upload_params, only: [ :form_videos ]
@@ -58,8 +59,9 @@ class AdminsController < ApplicationController
 
   # GET : /admins/video/:sign
   def card_details
-    @signs_view = SignQuery.instance.generate_signs_with_videos
-    data = @signs_view.find_by(id= params[:sign])
+    # @signs_view = SignQuery.instance.generate_signs_with_videos
+    # data = @signs_view.find_by(id= params[:sign])
+    data = SignQuery.instance.get_sign_details(params[:sign])
     render json: data
   end
 

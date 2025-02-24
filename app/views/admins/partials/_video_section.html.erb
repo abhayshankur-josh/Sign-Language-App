@@ -1,0 +1,126 @@
+<section class="video-signs-section px-5">
+  <div class="container-fluid">
+    <!-- Header and Toolbar -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+          <!-- Section Header -->
+          <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold mb-0">Videos</h2>
+            <p class="text-muted mb-0">Browse and manage your video content</p>
+          </div>
+          
+        </div>
+        <hr class="my-3">
+      </div>
+    </div>
+
+    <!-- Video Grid Layout -->
+    <div class="row">
+      <% @signs_view.each do |sign| %>
+        <%= render partial: "admins/partials/video_card", locals: { sign: sign } %>
+      <% end %>    
+    </div>
+
+  </div>
+</section>
+
+<%= render "admins/partials/video_detail_modal"%>
+
+<!-- JavaScript to handle modal data population -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get all video cards
+    const videoCards = document.querySelectorAll('.video-card');
+
+    // Add click event to each card
+    videoCards.forEach(card => {
+      card.addEventListener('click', async function(e) {
+        // Get video ID from data attribute
+        const videoId = this.getAttribute('data-video-id');
+        const video = await getVideoData(videoId);
+
+        if (!video || Object.keys(video).length === 0) return;
+
+        // Populate modal with video data
+        document.getElementById('modalVideoTitle').textContent = video.sign_title;
+        document.getElementById('modalVideoStatus').textContent = video.sign_status;
+        document.getElementById('modalVideoStatus').className = `badge rounded-pill ${getStatusClass(video.sign_status)}`;
+        document.getElementById('modalVideoViews').textContent = `${video.views} views`;
+
+        // Format the date in a human-readable way
+        var date = new Date(video.sign_created_on);
+        var formattedDate = date.toLocaleString('en-US');
+        document.getElementById('modalVideoDate').textContent = `Uploaded on ${formattedDate}`;
+        document.getElementById('modalVideoDescription').textContent = video.sign_description;
+        document.getElementById('modalCreatorName').textContent = video.submitter_name;
+        // document.getElementById('modalCreatorInfo').textContent = video.creator.info;
+        document.getElementById('modalCreatorAvatar').src = "<%= image_url('profile-publisher.png')%>";
+
+        // Set video source
+        document.getElementById('modalVideoSource').src = video.sign_video_url;
+        const videoPlayer = document.getElementById('modalVideoPlayer');
+        videoPlayer.load(); // Reload the video element
+        //document.getElementById('modalVideoCategory').textContent = video.category;
+        // Wait for the metadata to load
+        videoPlayer.addEventListener('loadedmetadata', function() {
+            // Set video duration
+            document.getElementById('modalVideoDuration').textContent = videoPlayer.duration;
+        });
+        //document.getElementById('modalVideoQuality').textContent = video.quality;
+
+        // Clear and populate tags
+        const tagsContainer = document.getElementById('modalVideoTags');
+        tagsContainer.innerHTML = '';
+        video.tags.forEach(tag => {
+          const tagElement = document.createElement('span');
+          tagElement.className = 'badge bg-light text-dark me-2 mb-2';
+          tagElement.textContent = tag;
+          tagsContainer.appendChild(tagElement);
+        });
+      });
+    });
+
+    // Helper function to get badge class based on status
+    function getStatusClass(status) {
+      switch(status) {
+        case 'success': return 'bg-success';
+        case 'pending': return 'bg-warning';
+        case 'rejected': return 'bg-danger';
+        default: return 'bg-secondary';
+      }
+    }
+
+    // Updated getVideoData function
+    async function getVideoData(id) {
+      try {
+        <%# TODO: Create an api to get details %>
+        const response = await fetch(`/admins/video/${id}`);
+        const data = await response.json();
+        console.log(data);
+        return data;
+      } catch (error) {
+        console.error("There was an error!", error);
+        return {};
+      }
+    }
+
+  });
+</script>
+
+<!-- Add custom styles for the video cards and section -->
+<style>
+  .video-signs-section {
+    background-color: #f8f9fa;
+  }
+  
+  .video-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+</style>

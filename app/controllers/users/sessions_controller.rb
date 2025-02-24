@@ -21,7 +21,7 @@ class Users::SessionsController < Devise::SessionsController
     when RoleQuery.instance.get_expert_id
       experts_dashboard_path
     when RoleQuery.instance.get_user_id
-      users_path
+      learner_index_path
     else
       root_path
     end
