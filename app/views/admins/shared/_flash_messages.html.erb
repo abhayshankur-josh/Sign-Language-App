@@ -1,0 +1,35 @@
+<div class="flash-alerts">
+    <% flash.each do |type, msg| %>
+        <% if type == 'info' %>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong><%= msg %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% elsif type == 'error' %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%= msg %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% elsif type == 'warning' %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong><%= msg %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% elsif type == 'success' %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= msg %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% elsif type == 'notice' %>
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <strong><%= msg %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% elsif type == 'alert' %>
+        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+            <strong><%= msg %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% end %>
+    <% end %>
+</div>

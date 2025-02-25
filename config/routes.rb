@@ -12,12 +12,14 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Root path
   root to: "home#index"
-
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -26,10 +28,19 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Routes for home :
+  get "/signs",                  to: "home#signs"
 
-  # Define resorces
-  resources :users
-  resources :admins
+  # Routes for learner :
+  resources :learner, only: [ :index ]
+
+  # Routes for admins :
+  get     "/admins/dashboard",       to: "admins#dashboard"
+  get     "/admins/users",           to: "admins#users_tab"
+  post    "/admins/user",            to: "admins#create_user"
+  get     "/admins/videos",          to: "admins#videos_tab"
+  post    "/admins/video",           to: "admins#form_videos"
+  get     "/admins/video/:sign",     to: "admins#card_details"
+  get     "/admins/signs",           to: "admins#signs_tab"
+  get     "/admins/submissions",     to: "admins#submissions_tab"
 end

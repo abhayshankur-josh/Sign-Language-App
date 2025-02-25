@@ -1,0 +1,206 @@
+
+<!-- Upload Video Modal with Bootstrap Grid Layout -->
+<div
+  class="modal fade"
+  id="uploadVideoModal"
+  tabindex="-1"
+  aria-labelledby="uploadVideoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadVideoModalLabel">
+          <i class="bi bi-person-plus me-2"></i>Upload New Sign
+        </h5>
+        <button 
+          type="button" 
+          class="btn-close" 
+          data-bs-dismiss="modal" 
+          aria-label="Close"> </button>
+      </div>
+      <div class="modal-body">
+        <%= form_with(url: admins_video_path, method: :post, id: "videoUploadForm") do | form |%>
+          <div class="row">
+            <!-- Publisher Mail -->
+            <div class="col-12 mb-3">
+              <%= form.label :publisherEmail, "Publisher Email", class: "form-label" %>
+              <%= form.email_field :publisherEmail, class: "form-control", value: @current_email, readOnly: true %>
+            </div>
+
+            <!-- Video File Upload -->
+            <div class="col-12 mb-3">
+              <%= form.label :videoFile, "Video File", class: "form-label" %>
+              <%= form.file_field :videoFile, class: "form-control", accept: "video/*", required: true %>
+
+              <%# <label for="videoFile" class="form-label">Video File</label> %>
+              <%# <input 
+                type="file" 
+                class="form-control" 
+                id="videoFile" 
+                accept="video/*" 
+                required
+              /> %>
+
+              <div class="form-text">Supported formats: MP4, WebM, MOV (Max size: 500MB)</div>
+            </div>
+            
+            <!-- Thumbnail Upload (Optional) -->
+            <div class="col-12 mb-3">
+              <%= form.label :thumbnailFile, "Custom Thumbnail (Optional)", class: "form-label" %>
+              <%= form.file_field :thumbnailFile, class: "form-control", accept: "image/*" %>
+              <%# <label for="thumbnailFile" class="form-label">Custom Thumbnail (Optional)</label>
+              <input 
+                type="file" 
+                class="form-control" 
+                id="thumbnailFile" 
+                accept="image/*"
+              /> %>
+            </div>
+            
+            <!-- Title -->
+            <div class="col-12 mb-3">
+              <%# <label for="videoTitle" class="form-label">Title</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="videoTitle" 
+                placeholder="Enter sign title"
+                required
+              /> %>
+              <%= label_tag :videoTitle, 'Title', class: 'form-label' %>
+              <%= text_field_tag :videoTitle, nil, placeholder: 'Enter sign title', class: 'form-control', required: true %>
+            </div>
+            
+            <!-- Description -->
+            <div class="col-12 mb-3">
+              <%# <label for="videoDescription" class="form-label">Description</label>
+              <textarea 
+                class="form-control" 
+                id="videoDescription" 
+                rows="3" 
+                placeholder="Describe your sign video"
+                required
+              ></textarea> %>
+              <%= form.label :videoDescription, 'Description', class: 'form-label' %>
+              <%= form.text_area :videoDescription, rows: 3, placeholder: 'Describe your sign video', class: 'form-control', required: true %>
+            </div>
+            
+            <!-- Category -->
+            <div class="col-md-6 mb-3">
+              <%# <label for="videoCategory" class="form-label">Category</label>
+              <select class="form-select" id="videoCategory" required>
+                <option value="" selected disabled>Select a category</option>
+                <option value="conversational">Conversational</option>
+                <option value="emergency">Emergency</option>
+                <option value="medical">Medical</option>
+                <option value="educational">Educational</option>
+                <option value="travel">Travel</option>
+                <option value="other">Other</option>
+              </select> %>
+              <%# form.label :videoCategory, 'Category', class: 'form-label' %>
+              <%# form.select :videoCategory, 
+                options_for_select([
+                  ['Select a category', ''], 
+                  ['Conversational', 'conversational'], 
+                  ['Emergency', 'emergency'], 
+                  ['Medical', 'medical'], 
+                  ['Educational', 'educational'], 
+                  ['Travel', 'travel'], 
+                  ['Other', 'other']
+                ]), 
+                { include_blank: true, prompt: 'Select a category' }, 
+                { class: 'form-select', required: true } 
+              %>
+            </div>
+            
+            <!-- Tags -->
+            <div class="col-md-6 mb-3">
+              <%# <label for="videoTags" class="form-label">Tags (comma separated)</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="videoTags" 
+                placeholder="e.g., asl, greeting, beginner"
+              /> %>
+              <%# form.label :videoTags, 'Tags (comma separated)', class: 'form-label' %>
+              <%# form.text_field :videoTags, placeholder: 'e.g., asl, greeting, beginner', class: 'form-control' %>  
+            </div>
+            
+            <%# <!-- Privacy Settings -->
+            <div class="col-12 mb-3">
+              <label class="form-label d-block">Privacy Settings</label>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="privacySettings" 
+                  id="privacyPublic" 
+                  value="public" 
+                  checked
+                />
+                <label class="form-check-label" for="privacyPublic">Public</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="privacySettings" 
+                  id="privacyUnlisted" 
+                  value="unlisted"
+                />
+                <label class="form-check-label" for="privacyUnlisted">Unlisted</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="privacySettings" 
+                  id="privacyPrivate" 
+                  value="private"
+                />
+                <label class="form-check-label" for="privacyPrivate">Private</label>
+              </div>
+            </div> %>
+            
+            <!-- Upload Progress -->
+            <%# <div class="col-12 mb-3 d-none" id="uploadProgressContainer">
+              <label class="form-label">Upload Progress</label>
+              <div class="progress">
+                <div 
+                  class="progress-bar" 
+                  role="progressbar" 
+                  style="width: 0%" 
+                  aria-valuenow="0" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div> %>
+            <div class="col-12 mb-3 d-none" id="uploadProgressContainer">
+              <%= form.label :uploadProgress, 'Upload Progress', class: 'form-label' %>
+              <div class="progress">
+                <div 
+                  class="progress-bar" 
+                  role="progressbar" 
+                  style="width: 0%" 
+                  aria-valuenow="0" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="submit" form="videoUploadForm" class="btn btn-primary">
+          <i class="fas fa-cloud-upload-alt me-2"></i>Upload Sign
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

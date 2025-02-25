@@ -90,3 +90,10 @@ yarn-debug.log*
 !/app/assets/builds/.keep
 
 /node_modules
+/public/fonts/*
+/public/fonts/*
+\!/public/fonts/.keep
+
+
+# Custom
+config/initializers/filter_parameter_logging.rb
