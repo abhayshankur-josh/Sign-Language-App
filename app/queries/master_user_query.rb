@@ -14,13 +14,31 @@ class MasterUserQuery
     @users
   end
 
-  def add_user(user, role_name)
-    user[:role_id] = RoleQuery.instance.get_role_id(role_name)
-    User.create!(user)
+  def create_user
+    User.new
+  end
+
+  def add_user(user)
+    user.role_id = RoleQuery.instance.get_user_id
+    user.save
+  end
+
+  def add_expert(user, role_name = "user")
+    user.role_id = RoleQuery.instance.get_expert_id
+    user.save
+  end
+
+  def add_admin(user)
+    user.role_id = RoleQuery.instance.get_admin_id
+    user.save
   end
 
   def get_user(id)
     @users.find(id)
+  end
+
+  def find_by_email(email)
+    @users.find_by_email(email)
   end
 
 

@@ -3,9 +3,11 @@
 # Table name: users
 #
 #  id                     :integer          not null, primary key
+#  active                 :boolean          default(TRUE)
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  full_name              :string
+#  jti                    :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -16,6 +18,7 @@
 # Indexes
 #
 #  index_users_on_email                 (email) UNIQUE
+#  index_users_on_jti                   (jti)
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_role_id               (role_id)
 #
@@ -24,6 +27,7 @@
 #  role_id  (role_id => roles.id)
 #
 class User < ApplicationRecord
+  before_create :set_jti
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -32,4 +36,10 @@ class User < ApplicationRecord
   validates :full_name, :role_id, presence: true
   validates :email, uniqueness: true, presence: true
   belongs_to :role
+
+  private
+
+  def set_jti
+    self.jti = SecureRandom.uuid
+  end
 end

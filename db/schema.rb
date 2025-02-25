@@ -41,6 +41,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_29_135548) do
   create_table "users", force: :cascade do |t|
     t.string "full_name"
     t.integer "role_id", default: 1
+    t.string "jti"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
@@ -49,6 +51,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_29_135548) do
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
   end
