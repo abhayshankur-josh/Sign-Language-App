@@ -13,7 +13,6 @@ class Api::V1::ApplicationController < ApplicationController
         begin
             @decoded = JsonWebToken.decode(header)
             @current_user = User.find_by(id: @decoded[:user_id], jti: @decoded[:jti_id])
-            # p "current user: #{@current_user}"
             raise Exception.new("Token has been revoked!") if @current_user.nil?
         rescue ActiveRecord::RecordNotFound => e
             render json: { errors: e.message }, status: :unauthorized

@@ -84,3 +84,5 @@ gem "image_processing", ">= 1.2"
 gem "byebug", "~> 11.1", groups: [ :development, :test ]
 
 gem "ajax-datatables-rails"
+
+gem "rack-cors", "~> 2.0"

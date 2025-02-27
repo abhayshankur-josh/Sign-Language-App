@@ -51,5 +51,19 @@ class SignQuery
     Rails.logger.error "LOG WARNING: SQL ERROR - #{e.full_message}"
   end
 
+  def update_status?(id, status)
+    sign = Sign.find(id)
+    if Sign.statuses.include?(status)
+      sign.update!(status: status)
+      true
+    else
+      Rails.logger.error "LOG WARNING: Invalid status: #{status}"
+      false
+    end
+  rescue Exception => e
+    Rails.logger.error "LOG WARNING: #{e.full_message}"
+    false
+  end
+
   private_class_method :new
 end

@@ -5,8 +5,16 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post "auth/login", to: "auth#login"
+      post "auth/signup", to: "auth#signup"
       delete "auth/signout", to: "auth#signout"
-      resources :users, only: [ :index, :show, :create ]
+      get "auth/profile", to: "auth#profile"
+
+      get "submissions", to: "submissions#get_submissions"
+      get "submissions/view", to: "submissions#get_submissions_view"
+      get "submissions/view/:id", to: "submissions#get_submissions_view_for"
+      post "submissions/status", to: "submissions#action_submission"
+
+      get "signs", to: "signs#get_all"
 
       get "/*a", to: "application#not_found"
     end

@@ -14,6 +14,10 @@ class UserMailer < Devise::Mailer
         end
     end
 
+    def mail_to_publisher_on_submission_action(submissionId)
+      # TODO: Mailer Activity
+    end
+
     private
 
     def create_reset_password_token(user)
