@@ -4,17 +4,28 @@ class Api::V1::UsersController < Api::V1::ApplicationController
 
   # GET   /api/v1/users
   def index
-    users = MasterUserQuery.instance.get_all_users
+    users = UserQuery.instance.users
     render json: users, status: :ok # (200)
   end
 
   # POST    /api/v1/users
   def create
-    user = MasterUserQuery.instance.create_user
+    if prod_params[:password] == prod_params[:confirm_password]
+      user = MasterUserQuery.instance.create_user(
+        prod_params[:email],
+        prod_params[:full_name],
+        prod_params[:role_name],
+        prod_params[:password]
+      )
+
+    else
+
+    end
     user.full_name = prod_params[:full_name]
     user.email = prod_params[:email]
     user.password = prod_params[:password]
     user.password_confirmation = prod_params[:password]
+
 
     role_name = prod_params[:role_name]
 
@@ -64,6 +75,7 @@ class Api::V1::UsersController < Api::V1::ApplicationController
         :full_name,
         :email,
         :password,
+        :confirm_password,
         :role_name
       ])
     end

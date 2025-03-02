@@ -86,3 +86,5 @@ gem "byebug", "~> 11.1", groups: [ :development, :test ]
 gem "ajax-datatables-rails"
 
 gem "rack-cors", "~> 2.0"
+
+gem "rspec-rails", "~> 7.1"

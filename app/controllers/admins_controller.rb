@@ -39,6 +39,7 @@ class AdminsController < ApplicationController
 
   # POST : /admins/video
   def form_videos
+    # TODO Create service
     ActiveRecord::Base.transaction do
       videoId = VideoQuery.instance.create_record(@video_params[:videoFile], @video_params[:thumbnailFile])
       signId = SignQuery.instance.add_sign(@video_params[:videoTitle], @video_params[:videoDescription], videoId)

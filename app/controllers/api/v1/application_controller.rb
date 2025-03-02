@@ -12,8 +12,13 @@ class Api::V1::ApplicationController < ApplicationController
         header = header.split(" ").last if header
         begin
             @decoded = JsonWebToken.decode(header)
-            @current_user = User.find_by(id: @decoded[:user_id], jti: @decoded[:jti_id])
-            raise Exception.new("Token has been revoked!") if @current_user.nil?
+            if @decoded
+                raise Exception.new("Token has expired!") if Time.parse(@decoded[:expiry]) < Time.now
+                @current_user = User.find_by(id: @decoded[:user_id], jti: @decoded[:jti_id])
+                raise Exception.new("Token has been revoked!") if @current_user.nil?
+            else
+                raise Exception.new("Provide Authorization value.")
+            end
         rescue ActiveRecord::RecordNotFound => e
             render json: { errors: e.message }, status: :unauthorized
         rescue JWT::DecodeError => e

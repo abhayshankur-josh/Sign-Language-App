@@ -24,8 +24,6 @@ class VideoQuery
 
   def create_record(clip, thumbnail = nil)
     video = upload_video(clip, thumbnail)
-
-    # Now that video is saved and attachments are in place, you can set video_path
     video.update!(video_path: Rails.application.routes.url_helpers.rails_blob_path(video.video_clip, only_path: true))
     video.id
   rescue Exception => e

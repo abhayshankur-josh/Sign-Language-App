@@ -1,7 +1,7 @@
 class Api::V1::SubmissionsController < Api::V1::ApplicationController
     before_action :authorize_request
-    before_action :action_submission_params, only: :action_submission
 
+    # GET    /api/v1/submissions
     def get_submissions
         submissions = SubmissionQuery.instance.submissions
         render json: submissions, status: :ok
@@ -9,6 +9,14 @@ class Api::V1::SubmissionsController < Api::V1::ApplicationController
         render json: { error: "Exception: #{e.full_message}" }, status: :expectation_failed
     end
 
+    # POST   /api/v1/submissions
+    def create_submission
+        submission = Submissions::Create.new(create_submission_params)
+        result = submission.call
+        render json: result[:success] ? { message: result[:message] } : { error: result[:message] }, status: :ok
+    end
+
+    # GET    /api/v1/submissions/view
     def get_submissions_view
         submissions_view = SubmissionQuery.instance.get_submissions_view
         render json: submissions_view, status: :ok
@@ -16,6 +24,7 @@ class Api::V1::SubmissionsController < Api::V1::ApplicationController
         render json: { error: "Exception: #{e.full_message}" }, status: :expectation_failed
     end
 
+    # GET    /api/v1/submissions/view/:id
     def get_submissions_view_for
         submissions_view = SubmissionQuery.instance.get_submissions_view_for(params[:id])
         render json: submissions_view, status: :ok
@@ -23,17 +32,11 @@ class Api::V1::SubmissionsController < Api::V1::ApplicationController
         render json: { error: "Exception: #{e.full_message}" }, status: :expectation_failed
     end
 
+    # POST   /api/v1/submissions/status
     def action_submission
-        ActiveRecord::Base.transaction do
-            isSignUpdated = SignQuery.instance.update_status?(params[:signId], params[:signStatus])
-            isSubmissionUpdated = SubmissionQuery.instance.update_approver?(params[:submissionId], params[:approverId])
-            if isSignUpdated && isSubmissionUpdated
-                # Mailer Functions
-                render json: { message: "Submission Action Successfull." }, status: :ok
-            else
-                render json: { error: "Failed" }, status: :expectation_failed
-            end
-        end
+        action = Submissions::Action.new(action_submission_params)
+        result = action.call
+        render json: result[:success] ? { message: result[:message] } : { error: result[:message] }, status: :ok
     rescue Exception => e
         render json: { error: "Exception: #{e.full_message}" }, status: :expectation_failed
     end
@@ -41,9 +44,10 @@ class Api::V1::SubmissionsController < Api::V1::ApplicationController
     private
 
     def action_submission_params
-        params.permit(:submissionId, :approverId, :signId, :signStatus)
-    rescue Exception => e
-        Rails.logger.error "LOG WARNING: Invalid Params - #{e.full_message}"
-        nil
+        params.permit(:submissionId, :approverId, :signId, :signStatus, :rejectionReason)
+    end
+
+    def create_submission_params
+        params.permit(:publisherEmail, :videoTitle, :videoDescription, :thumbnailFile, :videoFile)
     end
 end

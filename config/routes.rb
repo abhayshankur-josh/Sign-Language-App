@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get "auth/profile", to: "auth#profile"
 
       get "submissions", to: "submissions#get_submissions"
+      post "submissions", to: "submissions#create_submission"
       get "submissions/view", to: "submissions#get_submissions_view"
       get "submissions/view/:id", to: "submissions#get_submissions_view_for"
       post "submissions/status", to: "submissions#action_submission"
