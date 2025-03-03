@@ -48,6 +48,14 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "overcommit", "~> 0.66.0"
+
+  gem "rspec-rails", "~> 7.1"
+
+  gem "shoulda-matchers", "~> 6.4"
+
+  gem "factory_bot_rails"
+
+  gem "database_cleaner-active_record"
 end
 
 group :development do
@@ -86,5 +94,3 @@ gem "byebug", "~> 11.1", groups: [ :development, :test ]
 gem "ajax-datatables-rails"
 
 gem "rack-cors", "~> 2.0"
-
-gem "rspec-rails", "~> 7.1"

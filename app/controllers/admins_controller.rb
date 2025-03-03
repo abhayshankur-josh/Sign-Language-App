@@ -32,6 +32,31 @@ class AdminsController < ApplicationController
     redirect_to admins_users_path
   end
 
+  def update_user
+    user_params = {
+      id: update_user_params[:userId].to_i,
+      full_name: update_user_params[:userName],
+      email: update_user_params[:userEmail],
+      role_id: RoleQuery.instance.get_role_id(update_user_params[:userRole])
+    }
+    if UserQuery.instance.update_user?(user_params)
+      flash[:notice] = "User updated successfully."
+    else
+      flash[:notice] = "Error updating user."
+    end
+    redirect_to admins_dashboard_path
+  end
+
+  def deactivate_user
+    id = params[:id]
+    if UserQuery.instance.deactivate_user?(id)
+      flash[:notice] = "User deactivated successfully."
+    else
+      flash[:alert] = "Error deactivating user."
+    end
+    redirect_to admins_dashboard_path
+  end
+
   # GET : /admins/videos
   def videos_tab
     @signs_view = SignQuery.instance.generate_signs_with_videos
@@ -102,5 +127,9 @@ class AdminsController < ApplicationController
     @video_params = params.permit(:videoFile, :thumbnailFile, :videoTitle, :videoDescription, :publisherEmail)
   rescue Exception => e
     render json: { error: e.full_message }, status: :expectation_failed
+  end
+
+  def update_user_params
+    params.permit(:userId, :userName, :userEmail, :userRole)
   end
 end

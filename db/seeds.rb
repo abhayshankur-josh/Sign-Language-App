@@ -34,7 +34,7 @@ User.destroy_all
 
 User.create!(
     full_name: "Admin Abhay",
-    email: "admin@gmail.com",
+    email: "optisyncenablers@gmail.com",
     password: "admin1234",
     password_confirmation: "admin1234",
     role_id: 3

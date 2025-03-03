@@ -1,16 +1,17 @@
 require_relative "../json_web_token"
 
 class Api::V1::AuthController < Api::V1::ApplicationController
-  before_action :authorize_request, only: [ :signout, :profile ]
+  before_action :authorize_request, only: :profile
   before_action :login_params, only: :login
   before_action :signup_params, only: :signup
+  before_action :authorize_request_for_logout, only: :signout
   before_action :refresh_jti, only: :signout
 
   # POST /auth/login
   def login
     ActiveRecord::Base.transaction do
-      user = User.find_by_email(params[:email])
-      if user&.valid_password?(params[:password])
+      user = User.find_by_email(login_params[:email])
+      if user&.valid_password?(login_params[:password])
         token = generate_token(user)
         # time = Time.now + 24.hours.to_i
         render json: { token: token, message: "Login Successfully." }, status: :created
@@ -75,8 +76,6 @@ class Api::V1::AuthController < Api::V1::ApplicationController
 
   def login_params
     params.permit(:email, :password)
-  rescue Exception => e
-    render json: { errors: "Ooppszz.. Something went wrong!" }, status: :bad_request
   end
 
   def signup_params
@@ -87,16 +86,14 @@ class Api::V1::AuthController < Api::V1::ApplicationController
 
   def refresh_jti
     @user = User.find(@current_user[:id])
-    @user.jti = SecureRandom.uuid
-    @user.save!
+    @user.update_column(:jti, SecureRandom.uuid)
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.message }, status: :unauthorized
   end
 
   def generate_token(user)
     sign_in(:user, user)
-    user.jti = SecureRandom.uuid
-    user.save!
+    user.update_column(:jti, SecureRandom.uuid)
     exp = Time.now + 6.hours.to_i
     JsonWebToken.encode({
       user_id: user.id,

@@ -33,7 +33,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  validates :full_name, :role_id, presence: true
+  validates :full_name, :role_id, :email, :password, presence: true
+  validates :email, uniqueness: true
+
   belongs_to :role
 
   private

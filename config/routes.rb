@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       get "submissions/view", to: "submissions#get_submissions_view"
       get "submissions/view/:id", to: "submissions#get_submissions_view_for"
       post "submissions/status", to: "submissions#action_submission"
+      get "submissions/activity", to: "submissions#recent_activity"
 
       get "signs", to: "signs#get_all"
 
@@ -47,6 +48,8 @@ Rails.application.routes.draw do
   get     "/admins/dashboard",       to: "admins#dashboard"
   get     "/admins/users",           to: "admins#users_tab"
   post    "/admins/user",            to: "admins#create_user"
+  post    "/admins/user/:id/edit",   to: "admins#update_user", as: "update_user"
+  delete "/admins/user/:id/deactivate", to: "admins#deactivate_user", as: "deactivate_user"
   get     "/admins/videos",          to: "admins#videos_tab"
   post    "/admins/video",           to: "admins#form_videos"
   get     "/admins/video/:sign",     to: "admins#card_details"

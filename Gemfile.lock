@@ -106,6 +106,10 @@ GEM
     concurrent-ruby (1.3.5)
     connection_pool (2.5.0)
     crass (1.0.6)
+    database_cleaner-active_record (2.2.0)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     date (3.4.1)
     debug (1.10.0)
       irb (~> 1.10)
@@ -119,6 +123,11 @@ GEM
     diff-lcs (1.6.0)
     drb (2.2.1)
     erubi (1.13.1)
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.4.4)
+      factory_bot (~> 6.5)
+      railties (>= 5.0.0)
     ffi (1.17.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -311,6 +320,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    shoulda-matchers (6.4.0)
+      activesupport (>= 5.2.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -362,8 +373,10 @@ DEPENDENCIES
   brakeman
   byebug (~> 11.1)
   capybara
+  database_cleaner-active_record
   debug
   devise (~> 4.9)
+  factory_bot_rails
   haml (~> 6.3)
   image_processing (>= 1.2)
   importmap-rails
@@ -381,6 +394,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   rubocop-rspec
   selenium-webdriver
+  shoulda-matchers (~> 6.4)
   sprockets-rails
   sqlite3 (>= 1.4)
   stimulus-rails

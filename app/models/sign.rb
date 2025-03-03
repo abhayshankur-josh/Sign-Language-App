@@ -19,7 +19,7 @@
 #  video_id  (video_id => videos.id)
 #
 class Sign < ApplicationRecord
-  enum :status, [ :approved, :pending, :rejected ]
+  enum :status, { approved: 0, pending: 1, rejected: 2 }
   validates :title, :description, :video_id, presence: true
   validates :status, inclusion: { in: :status, message: "%{value} is not valid status!" }
   belongs_to :video

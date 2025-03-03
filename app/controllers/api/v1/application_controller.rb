@@ -27,4 +27,24 @@ class Api::V1::ApplicationController < ApplicationController
             render json: { errors: e.message }, status: :precondition_failed
         end
     end
+
+    def authorize_request_for_logout
+        header = request.headers["Authorization"]
+        header = header.split(" ").last if header
+        begin
+            @decoded = JsonWebToken.decode(header)
+            if @decoded
+                @current_user = User.find_by(id: @decoded[:user_id], jti: @decoded[:jti_id])
+                raise Exception.new("Token has been revoked!") if @current_user.nil?
+            else
+                raise Exception.new("Provide Authorization value.")
+            end
+        rescue ActiveRecord::RecordNotFound => e
+            render json: { errors: e.message }, status: :unauthorized
+        rescue JWT::DecodeError => e
+            render json: { errors: e.message }, status: :unauthorized
+        rescue Exception => e
+            render json: { errors: e.message }, status: :precondition_failed
+        end
+    end
 end

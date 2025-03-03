@@ -41,6 +41,14 @@ class Api::V1::SubmissionsController < Api::V1::ApplicationController
         render json: { error: "Exception: #{e.full_message}" }, status: :expectation_failed
     end
 
+    # GET   /api/v1/submissions/activity
+    def recent_activity
+        id = @current_user.id
+        activity = SubmissionQuery.instance.get_recent_submission_view_for(id)
+        render json: { data: activity }, status: :ok
+    end
+
+
     private
 
     def action_submission_params

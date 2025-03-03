@@ -32,6 +32,7 @@ class SubmissionQuery
                           submitters.full_name AS publisher_name,
                           signs.id AS sign_id,
                           signs.title AS sign_title,
+                          signs.description AS sign_description,
                           CASE signs.status
                             WHEN 0 THEN 'approved'
                             WHEN 1 THEN 'pending'
@@ -63,5 +64,10 @@ class SubmissionQuery
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error "LOG WARNING: Update failed: #{e.full_message}"
     false
+  end
+
+  def get_recent_submission_view_for(id)
+    submissions = get_submissions_view
+    submissions.order(:updated_at).where("approver_id = :id OR publisher_id = :id", id: id).to_a
   end
 end

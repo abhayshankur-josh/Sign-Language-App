@@ -44,14 +44,14 @@
                 </thead>
                 <tbody>
                     <% @users.each do |user| %>
-                    <tr>
+                    <tr class=<%= user.active ? '' : 'bg-warning text-dark' %>>
                         <td><%= user.id %></td>
                         <td><%= user.full_name %></td>
                         <td><%= user.email %></td>
                         <td><span class="badge bg-primary"><%= RoleQuery.instance.get_role_name(user.role_id) %></span></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                            <button class="btn btn-sm btn-outline-primary me-1"  data-bs-toggle="modal" data-bs-target="#editUserModal" onClick="editUserModalForm(<%= user.id %>)">Edit</button>
+                            <%= button_to "Deactivate", deactivate_user_path(user.id), method: :delete, class: "btn d-span btn-sm btn-outline-danger" %>
                         </td>
                     </tr>
                     <% end %>
@@ -60,3 +60,21 @@
         </div>
     </div>
 </div>
+
+<%= render 'admins/partials/edit_user'%>
+
+<script>
+function editUserModalForm(id) {
+  const users = <%= @users.to_json.html_safe %>;
+  const user = users.find(user => user.id === id);
+  
+  // Update form action URL dynamically
+  const form = document.getElementById('editUserForm');
+  form.action = `/admins/user/${id}/edit`;
+  
+  // Populate form fields
+  document.getElementById('modalUserId').value = user.id;
+  document.getElementById('modalUserName').value = user.full_name;
+  document.getElementById('modalUserEmail').value = user.email;
+}
+</script>

@@ -32,15 +32,18 @@ class UserQuery
     add_user!(user, role_name)
   end
 
+  def update_user?(user_params)
+    user = User.find(user_params[:id])
+    user.update_columns(user_params)
+  end
+
   def get_user(id)
     @users.find(id)
   end
 
-  def deactivate_user(id)
+  def deactivate_user?(id)
     user = @users.find(id)
-    user.update!(active: false)
-  rescue Exception => e
-    Rails.logger.Error "LOG WARNING: #{e.full_message}"
+    user.update_column(:active, false)
   end
 
   def get_user_id(email)
