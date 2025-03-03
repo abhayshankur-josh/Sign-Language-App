@@ -62,15 +62,25 @@
             </thead>
             <tbody>
               <% @users.each do |user| %>
-              <tr>
+              <tr class="<%= user.active ? '' : 'table-danger'%>">
                 <td><%= user.id %></td>
                 <td><%= user.full_name%></td>
                 <td><%= user.email %></td>
                 <td><%= RoleQuery.instance.get_role_name(user.role_id) %></td>
                 <td><%= user.created_at.strftime("%B %d, %Y") %></td>
                 <td>
-                  <i class="bi bi-pencil action-icon me-2"></i>
-                  <i class="bi bi-trash action-icon"></i>
+                  <i class="bi bi-pencil action-icon m-2" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#editUserModal" 
+                      style="cursor: pointer"
+                      onClick="editUserModalForm(<%= user.id %>)"
+                  ></i>
+                  <%= button_to deactivate_user_path(user.id), 
+                      method: :delete, 
+                      data: { confirm: 'Are you sure?' }, 
+                      class: "btn p-0 m-2" do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
                 </td>
               </tr>
               <% end %>
@@ -95,4 +105,4 @@
     </div>
 </div>
 
-<%= render "admins/partials/invite_user_modal" %>
+<%= render 'admins/partials/edit_user'%>

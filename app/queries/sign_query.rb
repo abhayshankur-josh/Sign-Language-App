@@ -55,10 +55,8 @@ class SignQuery
     sign = Sign.find(id)
     if Sign.statuses.include?(status)
       sign.update!(status: status)
-      true
     else
-      Rails.logger.error "LOG WARNING: Invalid status: #{status}"
-      false
+      raise Exception.new("Invalid Status")
     end
   rescue Exception => e
     Rails.logger.error "LOG WARNING: #{e.full_message}"

@@ -19,24 +19,40 @@ class Submissions::Create
         end
     rescue Exception => e
         Rails.logger.error "Exception: #{e.full_message}"
-        { success: false, message: "Exception!" }
+        { success: false, message: e.message }
     end
 
     private
 
     def upload_video
-        VideoQuery.instance.create_record(@submission[:videoFile], @submission[:thumbnailFile])
+        videoId = VideoQuery.instance.create_record(@submission[:videoFile], @submission[:thumbnailFile])
+        unless videoId.is_a? Numeric
+            raise Exception.new("Failed to upload Video!")
+        end
+        videoId
     end
 
     def create_sign(videoId)
-        SignQuery.instance.add_sign(@submission[:videoTitle], @submission[:videoDescription], videoId)
+        signId = SignQuery.instance.add_sign(@submission[:videoTitle], @submission[:videoDescription], videoId)
+        unless signId.is_a? Numeric
+            raise Exception.new("Failed to Create Sign!")
+        end
+        signId
     end
 
     def get_user
-        UserQuery.instance.get_user_id(@submission[:publisherEmail])
+        userId = UserQuery.instance.get_user_id(@submission[:publisherEmail])
+        unless userId.is_a? Numeric
+            raise Exception.new("User not found!")
+        end
+        userId
     end
 
     def create_submission(publisherId, signId)
-        SubmissionQuery.instance.add_submission(publisherId, signId)
+        submissionId = SubmissionQuery.instance.add_submission(publisherId, signId)
+        unless submissionId.is_a? Numeric
+            raise Exception.new("Failed to Create Submission!")
+        end
+        submissionId
     end
 end

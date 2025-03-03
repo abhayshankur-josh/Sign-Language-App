@@ -12,6 +12,7 @@ class Video < ApplicationRecord
   has_one_attached :video_thumbnail
 
   validates :video_clip, presence: true
+  validates :video_path, presence: true
 
   has_one :sign, dependent: :destroy
 end

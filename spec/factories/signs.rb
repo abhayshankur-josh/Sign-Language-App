@@ -21,9 +21,9 @@
 # spec/factories/signs.rb
 FactoryBot.define do
   factory :sign do
-    title { 'Sample Title' }
-    description { 'Sample Description' }
-    status { 'pending' }
-    video
+    sequence(:title) { |n| "Sign Title #{n}" }
+    description { "This is a sample description for the sign." }
+    status { :approved }
+    video_id { create(:video).id }
   end
 end

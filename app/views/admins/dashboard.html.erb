@@ -1,34 +1,158 @@
 
 <!-- Table Section -->
-
-<div class="row">
+<div class="container py-5">
+    <!-- First Row: Users Overview -->
+    <h4 class="fw-bold mb-4 border-start border-primary border-5 ps-3">Users Overview</h4>
+    <div class="row mb-4 g-3">
+    <div class="col-md-4">
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Total Users</h6>
+                <h2 class="fw-bold mb-0"><%= @total_users %></h2>
+            </div>
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary d-flex align-items-center justify-content-center">
+                <i class="bi bi-people-fill fs-1"></i>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Total Experts</h6>
+                <h2 class="fw-bold mb-0"><%= @expert_count %></h2>
+            </div>
+            <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success d-flex align-items-center justify-content-center">
+                <i class="bi bi-mortarboard-fill fs-1"></i>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Total Learners</h6>
+                <h2 class="fw-bold mb-0"><%= @learners_count %></h2>
+            </div>
+            <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger d-flex align-items-center justify-content-center">
+                <i class="bi bi-person-fill fs-1"></i>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- Second Row: Submissions Overview -->
+    <h4 class="fw-bold mb-4 border-start border-primary border-5 ps-3">Submissions Overview</h4>
+    <div class="row mb-4 g-3">
     <div class="col-md-3">
-        <div class="stat-card">
-        <h6 class="text-muted mb-3">Total Users</h6>
-        <h3 class="mb-0"><%= @users.count %></h3>
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Total Submissions</h6>
+                <h2 class="fw-bold mb-0"><%= @total_submissions %></h2>
+            </div>
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary d-flex align-items-center justify-content-center">
+                <i class="bi bi-file-earmark-text fs-1"></i>
+            </div>
+            </div>
+        </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stat-card">
-        <h6 class="text-muted mb-3">Total Videos</h6>
-        <h3 class="mb-0"><%= @videos.count %></h3>
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Approved</h6>
+                <h2 class="fw-bold mb-0"><%= @approved_submissions %></h2>
+            </div>
+            <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success d-flex align-items-center justify-content-center">
+                <i class="bi bi-check-circle-fill fs-1"></i>
+            </div>
+            </div>
+        </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stat-card">
-        <h6 class="text-muted mb-3">Active Signs</h6>
-        <h3 class="mb-0"><%= @signs.count %></h3>
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Pending</h6>
+                <h2 class="fw-bold mb-0"><%= @pending_submissions %></h2>
+            </div>
+            <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning d-flex align-items-center justify-content-center">
+                <i class="bi bi-hourglass-split fs-1"></i>
+            </div>
+            </div>
+        </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stat-card">
-        <h6 class="text-muted mb-3">Submissions</h6>
-        <h3 class="mb-0"><%= @submissions.count %></h3>
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Rejected</h6>
+                <h2 class="fw-bold mb-0"><%= @rejected_submissions %></h2>
+            </div>
+            <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger d-flex align-items-center justify-content-center">
+                <i class="bi bi-x-circle-fill fs-1"></i>
+            </div>
+            </div>
         </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- Third Row: Signs and Videos -->
+    <h4 class="fw-bold mb-4 border-start border-primary border-5 ps-3">Content Overview</h4>
+    <div class="row g-3">
+    <div class="col-md-6">
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Active Signs</h6>
+                <h2 class="fw-bold mb-0"><%= @total_signs %></h2>
+            </div>
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary d-flex align-items-center justify-content-center">
+                <i class="bi bi-hand-index-thumb fs-1"></i>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow h-100 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="text-muted text-uppercase small mb-2">Total Videos</h6>
+                <h2 class="fw-bold mb-0"><%= @total_videos %></h2>
+            </div>
+            <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger d-flex align-items-center justify-content-center">
+                <i class="bi bi-camera-video-fill fs-1"></i>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
     </div>
 </div>
 
-<div class="card mt-4">
+<div class="card mt-4 my-5">
     <div class="card-body">
         <h5 class="card-title mb-4">Recent Users</h5>
         <div class="table-responsive">
@@ -39,20 +163,15 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
-                    <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% @users.each do |user| %>
-                    <tr class=<%= user.active ? '' : 'bg-warning text-dark' %>>
+                    <% @recent_users.each do |user| %>
+                    <tr class="<%= user.active ? '' : 'table-danger'%>">
                         <td><%= user.id %></td>
                         <td><%= user.full_name %></td>
                         <td><%= user.email %></td>
                         <td><span class="badge bg-primary"><%= RoleQuery.instance.get_role_name(user.role_id) %></span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary me-1"  data-bs-toggle="modal" data-bs-target="#editUserModal" onClick="editUserModalForm(<%= user.id %>)">Edit</button>
-                            <%= button_to "Deactivate", deactivate_user_path(user.id), method: :delete, class: "btn d-span btn-sm btn-outline-danger" %>
-                        </td>
                     </tr>
                     <% end %>
                 </tbody>
@@ -60,21 +179,3 @@
         </div>
     </div>
 </div>
-
-<%= render 'admins/partials/edit_user'%>
-
-<script>
-function editUserModalForm(id) {
-  const users = <%= @users.to_json.html_safe %>;
-  const user = users.find(user => user.id === id);
-  
-  // Update form action URL dynamically
-  const form = document.getElementById('editUserForm');
-  form.action = `/admins/user/${id}/edit`;
-  
-  // Populate form fields
-  document.getElementById('modalUserId').value = user.id;
-  document.getElementById('modalUserName').value = user.full_name;
-  document.getElementById('modalUserEmail').value = user.email;
-}
-</script>

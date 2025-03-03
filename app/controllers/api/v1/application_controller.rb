@@ -2,6 +2,7 @@ require_relative "../json_web_token"
 
 class Api::V1::ApplicationController < ApplicationController
     protect_from_forgery with: :null_session
+    before_action :authorize_request, only: :not_found
 
     def not_found
         render json: { error: "not_found" }
@@ -20,11 +21,11 @@ class Api::V1::ApplicationController < ApplicationController
                 raise Exception.new("Provide Authorization value.")
             end
         rescue ActiveRecord::RecordNotFound => e
-            render json: { errors: e.message }, status: :unauthorized
-        rescue JWT::DecodeError => e
-            render json: { errors: e.message }, status: :unauthorized
-        rescue Exception => e
             render json: { errors: e.message }, status: :precondition_failed
+        rescue JWT::DecodeError => e
+            render json: { errors: e.message }, status: :precondition_failed
+        rescue Exception => e
+            render json: { errors: e.message }, status: :unauthorized
         end
     end
 
@@ -40,11 +41,11 @@ class Api::V1::ApplicationController < ApplicationController
                 raise Exception.new("Provide Authorization value.")
             end
         rescue ActiveRecord::RecordNotFound => e
-            render json: { errors: e.message }, status: :unauthorized
-        rescue JWT::DecodeError => e
-            render json: { errors: e.message }, status: :unauthorized
-        rescue Exception => e
             render json: { errors: e.message }, status: :precondition_failed
+        rescue JWT::DecodeError => e
+            render json: { errors: e.message }, status: :precondition_failed
+        rescue Exception => e
+            render json: { errors: e.message }, status: :unauthorized
         end
     end
 end

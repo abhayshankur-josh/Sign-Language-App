@@ -4,6 +4,8 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      root to: "application#not_found"
+
       post "auth/login", to: "auth#login"
       post "auth/signup", to: "auth#signup"
       delete "auth/signout", to: "auth#signout"
@@ -18,7 +20,7 @@ Rails.application.routes.draw do
 
       get "signs", to: "signs#get_all"
 
-      get "/*a", to: "application#not_found"
+      get "/*path", to: "application#not_found"
     end
   end
 
@@ -55,4 +57,7 @@ Rails.application.routes.draw do
   get     "/admins/video/:sign",     to: "admins#card_details"
   get     "/admins/signs",           to: "admins#signs_tab"
   get     "/admins/submissions",     to: "admins#submissions_tab"
+
+  # Redirect to root if not found any matching route.
+  get "*path" => redirect("/")
 end

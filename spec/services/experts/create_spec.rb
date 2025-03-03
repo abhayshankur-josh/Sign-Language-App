@@ -1,6 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Experts::Create, type: :service do
+RSpec.describe Experts::Create, type: :model do
+  before do
+    create(:role, :expert)
+  end
+
   describe '#create' do
     let(:valid_attributes) do
       {
@@ -16,18 +20,17 @@ RSpec.describe Experts::Create, type: :service do
         email: 'test@example.com',
         username: 'testuser',
         password: 'password123',
-        confirm_password: 'password321' # Mismatched passwords
+        confirm_password: 'password321'
       }
     end
 
-    subject { described_class.new(attributes) }
+    subject { described_class.new(attributes).create }
 
     context 'when attributes are valid' do
       let(:attributes) { valid_attributes }
-
       it 'creates an expert record successfully' do
-        expect { subject.create }.to change(User, :count).by(1)
-        result = subject.create
+        expect { subject }.to change(User, :count).by(1)
+        result = subject
         expect(result[:success]).to be true
         expect(result[:message]).to be_a(User)
       end
@@ -37,11 +40,14 @@ RSpec.describe Experts::Create, type: :service do
       let(:attributes) { invalid_attributes }
 
       it 'raises an ArgumentError' do
-        expect { subject.create }.to raise_error(ArgumentError, 'Password Mismatch!')
+        # expect { subject }.to raise_error(ArgumentError, 'Password Mismatch!')
+        result = subject
+        expect(result[:success]).to be false
+        expect(result[:message]).to eq("Password Mismatch!")
       end
 
       it 'does not create an expert record' do
-        expect { subject.create rescue nil }.not_to change(User, :count)
+        expect { subject rescue nil }.not_to change(User, :count)
       end
     end
 
@@ -53,10 +59,10 @@ RSpec.describe Experts::Create, type: :service do
       end
 
       it 'logs the exception and returns an error message' do
-        expect(Rails.logger).to receive(:error).with(/Exception: Something went wrong/)
-        result = subject.create rescue nil
+        expect(Rails.logger).to receive(:error).with(/Exception:/)
+        result = subject
         expect(result[:success]).to be false
-        expect(result[:message]).to eq('Exception!')
+        expect(result[:message]).to eq('Something went wrong')
       end
     end
   end

@@ -9,10 +9,45 @@ class AdminsController < ApplicationController
 
   # GET : /admins/dashboard
   def dashboard
+    @recent_users = @users.order(updated_at: :DESC)
+
+    @total_users = @users.count
+    @expert_count = @users.where(role_id: RoleQuery.instance.get_expert_id).count
+    @learners_count = @users.where(role_id: RoleQuery.instance.get_user_id).count
+
+    @total_submissions = @submissions.count
+    @approved_submissions = @submissions.joins(:sign).where("signs.status = ?", Sign.statuses[:approved]).count
+    @pending_submissions = @submissions.joins(:sign).where("signs.status = ?", Sign.statuses[:pending]).count
+    @rejected_submissions = @submissions.joins(:sign).where("signs.status = ?", Sign.statuses[:rejected]).count
+
+    @total_signs = @signs.count
+    @total_videos = @videos.count
   end
 
   # GET : /admins/users
   def users_tab
+  end
+
+  # GET : /admins/videos
+  def videos_tab
+    @signs_view = SignQuery.instance.generate_signs_with_videos
+  end
+
+  # GET : /admins/signs
+  def signs_tab
+    respond_to do |format|
+      format.html
+      format.json { render json: SignDatatable.new(params) }
+    end
+  end
+
+  # GET : /admins/submissions
+  def submissions_tab
+    @current_email = current_user.email
+    respond_to do |format|
+      format.html
+      format.json { render json: SubmissionDatatable.new(params) }
+    end
   end
 
   # POST : /admins/user
@@ -32,13 +67,9 @@ class AdminsController < ApplicationController
     redirect_to admins_users_path
   end
 
+  # POST   /admins/user/:id/edit
   def update_user
-    user_params = {
-      id: update_user_params[:userId].to_i,
-      full_name: update_user_params[:userName],
-      email: update_user_params[:userEmail],
-      role_id: RoleQuery.instance.get_role_id(update_user_params[:userRole])
-    }
+    user_params = update_user_params
     if UserQuery.instance.update_user?(user_params)
       flash[:notice] = "User updated successfully."
     else
@@ -47,6 +78,7 @@ class AdminsController < ApplicationController
     redirect_to admins_dashboard_path
   end
 
+  # DELETE /admins/user/:id/deactivate
   def deactivate_user
     id = params[:id]
     if UserQuery.instance.deactivate_user?(id)
@@ -55,11 +87,6 @@ class AdminsController < ApplicationController
       flash[:alert] = "Error deactivating user."
     end
     redirect_to admins_dashboard_path
-  end
-
-  # GET : /admins/videos
-  def videos_tab
-    @signs_view = SignQuery.instance.generate_signs_with_videos
   end
 
   # POST : /admins/video
@@ -81,31 +108,13 @@ class AdminsController < ApplicationController
     redirect_to admins_videos_path
   rescue Exception => e
     Rails.logger.error "ERROR: #{e.full_message}"
+    flash[:warning] = "Exception occured!"
   end
 
   # GET : /admins/video/:sign
   def card_details
-    # @signs_view = SignQuery.instance.generate_signs_with_videos
-    # data = @signs_view.find_by(id= params[:sign])
     data = SignQuery.instance.get_sign_details(params[:sign])
     render json: data
-  end
-
-  # GET : /admins/signs
-  def signs_tab
-    respond_to do |format|
-      format.html
-      format.json { render json: SignDatatable.new(params) }
-    end
-  end
-
-  # GET : /admins/submissions
-  def submissions_tab
-    @current_email = current_user.email
-    respond_to do |format|
-      format.html
-      format.json { render json: SubmissionDatatable.new(params) }
-    end
   end
 
   private
@@ -130,6 +139,13 @@ class AdminsController < ApplicationController
   end
 
   def update_user_params
-    params.permit(:userId, :userName, :userEmail, :userRole)
+    params.permit(:userId, :userName, :userEmail, :userRole, :userStatus)
+    {
+      id: params[:userId].to_i,
+      full_name: params[:userName],
+      email: params[:userEmail],
+      role_id: RoleQuery.instance.get_role_id(params[:userRole]),
+      active: params[:userStatus]
+    }
   end
 end

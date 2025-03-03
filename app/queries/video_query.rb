@@ -16,6 +16,7 @@ class VideoQuery
     # Attach the thumbnail if it's present
     video.video_thumbnail.attach(thumbnail) if thumbnail.present?
     # Save the video after attaching files
+    video.video_path = video.video_clip.name
     video.save!
     video
   rescue Exception => e

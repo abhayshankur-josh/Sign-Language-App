@@ -4,11 +4,9 @@ class Experts::Create
     end
 
     def create
-        ActiveRecord::Base.transaction do
-            confirm_password!
-            create_experts_record
-            return { success: true, message: @user }
-        end
+        confirm_password!
+        create_experts_record
+        { success: true, message: @user }
     rescue Exception => e
         Rails.logger.error "Exception: #{e.full_message}"
         { success: false, message: e.message }
