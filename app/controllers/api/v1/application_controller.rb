@@ -5,8 +5,10 @@ class Api::V1::ApplicationController < ApplicationController
     before_action :authorize_request, only: :not_found
 
     def not_found
-        render json: { error: "not_found" }
+        render json: { errors: "not_found" }
     end
+
+    private
 
     def authorize_request
         header = request.headers["Authorization"]

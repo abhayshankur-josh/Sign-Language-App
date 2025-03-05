@@ -11,7 +11,6 @@ class SignQuery
   end
 
   def add_sign(title, description, videoId)
-    # Create a Sign Record.
     sign = Sign.new
     sign.title = title
     sign.description = description
@@ -21,6 +20,7 @@ class SignQuery
     sign.id
   rescue Exception => e
     Rails.logger.error "LOG WARNING: #{e.full_message}"
+    raise Exception.new("Exception in add_sign!")
   end
 
   def generate_signs_with_videos

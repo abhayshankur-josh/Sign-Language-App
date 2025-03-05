@@ -10,7 +10,7 @@ class UserQuery
     @users ||= User.all
   end
 
-  def add_user!(user, role_name = RoleQuery.ROLE_USER)
+  def add_user!(user, role_name = RoleQuery::ROLE_USER)
     user[:role_id] = RoleQuery.instance.get_role_id(role_name)
     if user.valid?
       user.save!
@@ -20,12 +20,13 @@ class UserQuery
     end
   end
 
-  def create_user(email, full_name, role_name, password = "defaultpass")
-    user = User.new(email: email, password: password, full_name: full_name)
-    add_user!(user, role_name)
-  rescue StandardError => e
-    Rails.logger.error "LOG WARNING: #{e.full_message}"
-  end
+  # @depricated
+  # def create_user(email, full_name, role_name, password = "defaultpass")
+  #   user = User.new(email: email, password: password, full_name: full_name)
+  #   add_user!(user, role_name)
+  # rescue StandardError => e
+  #   Rails.logger.error "LOG WARNING: #{e.full_message}"
+  # end
 
   def create_user!(email, full_name, role_name, password = "defaultpass")
     user = User.new(email: email, password: password, full_name: full_name)
@@ -35,6 +36,9 @@ class UserQuery
   def update_user?(user_params)
     user = User.find(user_params[:id])
     user.update_columns(user_params)
+  rescue Exception => e
+    Rails.logger.error e.full_message
+    false
   end
 
   def get_user(id)
@@ -44,13 +48,14 @@ class UserQuery
   def deactivate_user?(id)
     user = @users.find(id)
     user.update_column(:active, false)
+  rescue Exception => e
+    Rails.logger.error e.full_message
+    false
   end
 
   def get_user_id(email)
     user = @users.find_by(email: email)
     user&.id
-  rescue Exception => e
-    Rails.logger.warn "LOG WARNING: #{e.full_message}"
   end
 
   private_class_method :new

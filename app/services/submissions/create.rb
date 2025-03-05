@@ -12,9 +12,9 @@ class Submissions::Create
             if submissionId
                 Rails.logger.info "Uploaded Successfully"
                 return { success: true, message: "Uploaded Successfully" }
-            else
-                Rails.logger.info "Upload failed."
-                return { success: false, message: "Upload failed." }
+              # else
+              #     Rails.logger.info "Upload failed."
+              #     return { success: false, message: "Upload failed." }
             end
         end
     rescue Exception => e

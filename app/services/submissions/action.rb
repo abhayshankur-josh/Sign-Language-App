@@ -5,7 +5,6 @@ class Submissions::Action
 
     def call
         ActiveRecord::Base.transaction do
-            debugger
             update_status?
             update_approver?
             send_mail?

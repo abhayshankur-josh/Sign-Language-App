@@ -129,8 +129,8 @@ RSpec.describe User, type: :model do
     end
 
     it "is invalid with a duplicate email" do
-      create(:user, email: "test@example.com")
-      duplicate_user = build(:user, email: "test@example.com")
+      create(:user, :expert, email: "test@example.com")
+      duplicate_user = build(:user, :expert, email: "test@example.com")
       expect(duplicate_user).not_to be_valid
     end
 
@@ -147,7 +147,7 @@ RSpec.describe User, type: :model do
 
   context 'methods' do
     it 'sets jti before creating a user' do
-      user = build(:user)
+      user = build(:user, :expert)
       user.save
       expect(user.jti).not_to be_nil
     end

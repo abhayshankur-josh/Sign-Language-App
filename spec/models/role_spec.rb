@@ -63,23 +63,23 @@ RSpec.describe Role, type: :model do
 
   context "validations" do
     it "has a valid factory for admin" do
-      role = create(:role, role_name: "admin")
+      role = create(:role, role_name: RoleQuery::ROLE_ADMIN)
       expect(role).to be_valid
     end
 
     it "has a valid factory for expert" do
-      role = create(:role, role_name: "expert")
+      role = create(:role, role_name: RoleQuery::ROLE_EXPERT)
       expect(role).to be_valid
     end
 
     it "has a valid factory for learner" do
-      role = create(:role, role_name: "learner")
+      role = create(:role, role_name: RoleQuery::ROLE_USER)
       expect(role).to be_valid
     end
 
     it "is invalid with a duplicate role_name" do
-      create(:role, role_name: "admin")
-      duplicate_role = build(:role, role_name: "admin")
+      create(:role, role_name: RoleQuery::ROLE_ADMIN)
+      duplicate_role = build(:role, role_name: RoleQuery::ROLE_ADMIN)
       expect(duplicate_role).not_to be_valid
     end
 

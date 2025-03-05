@@ -30,7 +30,7 @@ class Users::Create
     end
 
     def create_user_record
-        @user = UserQuery.instance.create_user(
+        @user = UserQuery.instance.create_user!(
             @data[:email],
             @data[:username],
             @data[:role_name],

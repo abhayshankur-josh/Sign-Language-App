@@ -57,7 +57,7 @@ class AdminsController < ApplicationController
       full_name = @user_params[:userName]
       role_name = @user_params[:userRole]
       ActiveRecord::Base.transaction do
-        @user = UserQuery.instance.create_user(email, full_name, role_name)
+        @user = UserQuery.instance.create_user!(email, full_name, role_name)
         UserMailer.user_invitation(@user).deliver_now
         flash[:success] = "Mail has been sent successfully."
       end

@@ -18,6 +18,24 @@ class SubmissionQuery
     newSubmission.id
   rescue Exception => e
     Rails.logger.error "LOG WARNING: #{e.full_message}"
+    raise Exception.new(e.message)
+  end
+
+  def update_approver?(id, approver_id)
+    submission = Submission.find(id)
+    if User.exists?(approver_id)
+      submission.update!(approved_by_id: approver_id)
+      true
+    else
+      Rails.logger.error "LOG WARNING: Invalid approver ID: #{approver_id}"
+      false
+    end
+  rescue ActiveRecord::RecordNotFound => e
+    Rails.logger.error "LOG WARNING: Submission not found: #{e.full_message}"
+    false
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "LOG WARNING: Update failed: #{e.full_message}"
+    false
   end
 
   def get_submissions_view
@@ -47,23 +65,6 @@ class SubmissionQuery
   def get_submissions_view_for(id)
     submissions = get_submissions_view
     submissions.find_by(id: id)
-  end
-
-  def update_approver?(id, approver_id)
-    submission = Submission.find(id)
-    if User.exists?(approver_id)
-      submission.update!(approved_by_id: approver_id)
-      true
-    else
-      Rails.logger.error "LOG WARNING: Invalid approver ID: #{approver_id}"
-      false
-    end
-  rescue ActiveRecord::RecordNotFound => e
-    Rails.logger.error "LOG WARNING: Submission not found: #{e.full_message}"
-    false
-  rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.error "LOG WARNING: Update failed: #{e.full_message}"
-    false
   end
 
   def get_recent_submission_view_for(id)
