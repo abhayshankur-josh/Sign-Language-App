@@ -15,13 +15,12 @@ class UserMailer < Devise::Mailer
     end
 
     def mail_to_publisher_on_submission_action(submissionId, reason = nil)
-      # TODO: Mailer Activity
-      @submission = SubmissionQuery.instance.get_submissions_view_for(submissionId)
-      @publisher = UserQuery.instance.get_user(@submission.publisher_id)
-      @reason = reason
-      subject = @submission.sign_status == :approved ? "Good News! Your Sign Submission to #{APP_NAME} is Now Published" : "Update on Your Recent #{APP_NAME} Submission"
-      mail(to: @publisher.email, subject: subject)
-      true
+        @submission = SubmissionQuery.instance.get_submissions_view_for(submissionId)
+        @publisher = UserQuery.instance.get_user(@submission.publisher_id)
+        @reason = reason
+        subject = @submission.sign_status == :approved ? "Good News! Your Sign Submission to #{APP_NAME} is Now Published" : "Update on Your Recent #{APP_NAME} Submission"
+        mail(to: @publisher.email, subject: subject)
+        true
     rescue Exception => e
         Rails.logger.error "Failed to Send Mail: #{e.full_message}"
         false

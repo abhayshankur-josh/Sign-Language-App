@@ -57,7 +57,4 @@ Rails.application.routes.draw do
   get     "/admins/video/:sign",     to: "admins#card_details"
   get     "/admins/signs",           to: "admins#signs_tab"
   get     "/admins/submissions",     to: "admins#submissions_tab"
-
-  # Redirect to root if not found any matching route.
-  get "*path" => redirect("/")
 end

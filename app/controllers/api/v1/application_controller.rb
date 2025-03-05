@@ -5,7 +5,7 @@ class Api::V1::ApplicationController < ApplicationController
     before_action :authorize_request, only: :not_found
 
     def not_found
-        render json: { errors: "not_found" }
+        render json: { error: "not_found" }
     end
 
     private
@@ -23,11 +23,11 @@ class Api::V1::ApplicationController < ApplicationController
                 raise Exception.new("Provide Authorization value.")
             end
         rescue ActiveRecord::RecordNotFound => e
-            render json: { errors: e.message }, status: :precondition_failed
+            render json: { error: e.message }, status: :precondition_failed
         rescue JWT::DecodeError => e
-            render json: { errors: e.message }, status: :precondition_failed
+            render json: { error: e.message }, status: :precondition_failed
         rescue Exception => e
-            render json: { errors: e.message }, status: :unauthorized
+            render json: { error: e.message }, status: :unauthorized
         end
     end
 
@@ -43,11 +43,11 @@ class Api::V1::ApplicationController < ApplicationController
                 raise Exception.new("Provide Authorization value.")
             end
         rescue ActiveRecord::RecordNotFound => e
-            render json: { errors: e.message }, status: :precondition_failed
+            render json: { error: e.message }, status: :precondition_failed
         rescue JWT::DecodeError => e
-            render json: { errors: e.message }, status: :precondition_failed
+            render json: { error: e.message }, status: :precondition_failed
         rescue Exception => e
-            render json: { errors: e.message }, status: :unauthorized
+            render json: { error: e.message }, status: :unauthorized
         end
     end
 end

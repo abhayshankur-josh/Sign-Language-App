@@ -135,19 +135,19 @@
                 <div class="submission-details">
                     <h4 class="mb-3">Submission Information</h4>
                     <div class="detail-row">
-                        <div class="detail-label">Submission ID:</div>
+                        <div class="detail-label">Submission ID: </div>
                         <div class="detail-value"><%= @submission.id %></div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-label">Date Submitted:</div>
+                        <div class="detail-label">Date Submitted: </div>
                         <div class="detail-value"><%= @submission.created_at.strftime("%B %d, %Y %I:%M %p") %></div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-label">Reviewed By:</div>
+                        <div class="detail-label">Reviewed By: </div>
                         <div class="detail-value"><%= @submission.approver_name %></div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-label">Status:</div>
+                        <div class="detail-label">Status: </div>
                         <div class="detail-value"><%= @submission.sign_status.capitalize %></div>
                     </div>
                 </div>

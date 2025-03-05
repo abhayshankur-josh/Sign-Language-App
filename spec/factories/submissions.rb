@@ -7,8 +7,5 @@ FactoryBot.define do
         trait :approved do
             approved_by_id { build(:user, :expert).id }
         end
-      # association :sign, factory: :sign
-      # association :submitted_by, factory: :user
-      # association :approved_by, factory: :user, strategy: :build
     end
 end
