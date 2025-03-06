@@ -13,6 +13,7 @@ class SubmissionDatatable < AjaxDatatablesRails::ActiveRecord
       publisher_id: { source: "Submission.submitted_by_id", cond: :eq },
       publisher_name: { source: "User.full_name", searchable: false },
       sign_id: { source: "Sign.id", cond: :eq },
+      sign_status: { source: "Sign.status" },
       sign_title: { source: "Sign.title", cond: :like },
       video_id: { source: "Sign.video_id", cond: :eq },
       video_path: { source: "Video.video_path", cond: :like }
@@ -22,10 +23,6 @@ class SubmissionDatatable < AjaxDatatablesRails::ActiveRecord
   def data
     records.map do |record|
       {
-        # example:
-        # id: record.id,
-        # name: record.name
-
         id: record.id,
         created_at: record.created_at,
         updated_at: record.updated_at,
@@ -35,6 +32,7 @@ class SubmissionDatatable < AjaxDatatablesRails::ActiveRecord
         publisher_name: record.publisher_name,
         sign_id: record.sign_id,
         sign_title: record.sign_title,
+        sign_status: record.sign_status,
         video_id: record.video_id,
         video_path: record.video_path
       }
@@ -48,14 +46,19 @@ class SubmissionDatatable < AjaxDatatablesRails::ActiveRecord
                 .joins("INNER JOIN signs ON signs.id = submissions.sign_id")
                 .joins("INNER JOIN users AS submitters ON submitters.id = submissions.submitted_by_id")
                 .joins("INNER JOIN videos ON videos.id = signs.video_id")
-                .select('submissions.id, submissions.created_at, submissions.updated_at,
+                .select("submissions.id, submissions.created_at, submissions.updated_at,
                           submissions.approved_by_id AS approver_id,
                           approvers.full_name AS approver_name,
                           submissions.submitted_by_id AS publisher_id,
                           submitters.full_name AS publisher_name,
                           signs.id AS sign_id,
                           signs.title AS sign_title,
+                          CASE signs.status
+                            WHEN 0 THEN 'approved'
+                            WHEN 1 THEN 'pending'
+                            WHEN 2 THEN 'rejected'
+                          END AS sign_status,
                           signs.video_id AS video_id,
-                          videos.video_path AS video_path')
+                          videos.video_path AS video_path")
   end
 end

@@ -50,6 +50,23 @@ class AdminsController < ApplicationController
     end
   end
 
+  # DELETE : /admins/submissions/:id
+  def delete_submission
+    id = params[:id]
+    submission = SubmissionQuery.instance.get_submissions_view_for(id)
+    begin
+      ActiveRecord::Base.transaction do
+        Submission.destroy(submission.id)
+        Sign.destroy(submission.sign_id)
+        Video.destroy(submission.video_id)
+        flash[:success] = "Submission deleted successfully."
+      end
+    rescue StandardError => e
+      flash[:error] = "#{e.full_message}"
+    end
+    redirect_to admins_submissions_path
+  end
+
   # POST : /admins/user
   def create_user
     begin
@@ -91,7 +108,6 @@ class AdminsController < ApplicationController
 
   # POST : /admins/video
   def form_videos
-    # TODO Create service
     ActiveRecord::Base.transaction do
       videoId = VideoQuery.instance.create_record(@video_params[:videoFile], @video_params[:thumbnailFile])
       signId = SignQuery.instance.add_sign(@video_params[:videoTitle], @video_params[:videoDescription], videoId)

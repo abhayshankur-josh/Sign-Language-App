@@ -38,29 +38,35 @@
 </section>
 
 <script> 
-    function loadTable() {
-        var table = document.getElementById("signs-datatable");
-        
-        if (table) {
-            $(table).DataTable({
-            serverSide: true,
-            ajax: {
-                url: table.dataset.source,
-                type: "GET"
-            },
-            columns: [
-                { data: "id" },
-                { data: "title" },
-                { data: "description" },
-                { data: "status" },
-                { data: "created_at" },
-                { data: "updated_at" },
-                { data: "video_id" }
-            ]
-            });
-        } else {
-            console.error("Table with id 'signs-datatable' not found");
-        }
-    }
-    document.addEventListener("DOMContentLoaded", loadTable);
+  function loadTable() {
+      var table = document.getElementById("signs-datatable");
+      
+      // Check if the DataTable is already initialized
+      if ($.fn.DataTable.isDataTable(table)) {
+          table.DataTable().destroy(); // Destroy the existing instance
+          table.find('tbody').empty(); // Clear table content to prevent duplication
+      }
+
+      if (table) {
+          $(table).DataTable({
+          serverSide: true,
+          ajax: {
+              url: table.dataset.source,
+              type: "GET"
+          },
+          columns: [
+              { data: "id" },
+              { data: "title" },
+              { data: "description" },
+              { data: "status" },
+              { data: "created_at" },
+              { data: "updated_at" },
+              { data: "video_id" }
+          ]
+          });
+      } else {
+          console.error("Table with id 'signs-datatable' not found");
+      }
+  }
+  document.addEventListener("turbo:load", loadTable);
 </script>

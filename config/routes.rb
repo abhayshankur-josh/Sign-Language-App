@@ -57,4 +57,5 @@ Rails.application.routes.draw do
   get     "/admins/video/:sign",     to: "admins#card_details"
   get     "/admins/signs",           to: "admins#signs_tab"
   get     "/admins/submissions",     to: "admins#submissions_tab"
+  delete  "/admins/submissions/:id", to: "admins#delete_submission"
 end
