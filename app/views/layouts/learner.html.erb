@@ -37,9 +37,9 @@
 
   <body>
 
-    <%= render "shared/navbar" do%>
-        <% yield %>
-    <% end %>
+    <%= render "learner/shared/navbar"%>
+    <%= render "shared/flash_messages" %>
+    <%= yield %>
 
   </body>
 </html>

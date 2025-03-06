@@ -42,9 +42,12 @@ Rails.application.routes.draw do
 
   # Routes for home :
   get "/signs",                  to: "home#signs"
+  get "external_redirect",       to: "home#redirect_to_external"
+
 
   # Routes for learner :
   resources :learner, only: [ :index ]
+  post "/submission",  to: "learner#create_submission", as: "create_submission"
 
   # Routes for admins :
   get     "/admins/dashboard",       to: "admins#dashboard"
