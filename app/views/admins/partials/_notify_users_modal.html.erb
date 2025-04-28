@@ -1,0 +1,43 @@
+<div 
+  class="modal fade" 
+  id="notifyUserModal" 
+  tabindex="-1" 
+  aria-labelledby="notifyUserModalLabel" 
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notifyUserModalLabel">
+          <i class="bi bi-person-plus me-2"></i>Notify User
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with(url: admins_user_path, method: :post, id: "notifyUserForm") do |form| %>
+      <div class="modal-body">
+          <!-- Role Field -->
+          <div class="mb-3">
+            <%= form.label :userRole, "Role", class: "form-label" %>
+            <%= form.select :userRole, 
+                options_for_select([['Regular User', 'user'], ['Expert', 'expert'], ['Administrator', 'admin'], ['All Roles', 'all']], selected: ''), 
+                { include_blank: 'Select user role', required: true }, 
+                class: 'form-select', 
+                id: 'userRole' %>
+          </div>
+
+          <!-- Message Field -->
+          <div class="mb-3">
+            <%= form.label :message, "Message", class: "form-label" %>
+            <%= form.text_area :message, class: "form-control", id: "message", placeholder: "Enter your message here", rows: 4, required: true %>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" form="notifyUserForm" class="btn btn-notify">
+          <i class="bi bi-send me-2"></i>Send Notification
+        </button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

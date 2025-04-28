@@ -1,4 +1,3 @@
-require_relative "../json_web_token"
 
 class Api::V1::AuthController < Api::V1::ApplicationController
   before_action :authorize_request, only: :profile

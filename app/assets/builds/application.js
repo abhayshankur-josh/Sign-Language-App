@@ -6521,13 +6521,13 @@ var AttributeObserver = class {
   }
 };
 function add(map, key, value) {
-  fetch(map, key).add(value);
+  fetch2(map, key).add(value);
 }
 function del(map, key, value) {
-  fetch(map, key).delete(value);
+  fetch2(map, key).delete(value);
   prune(map, key);
 }
-function fetch(map, key) {
+function fetch2(map, key) {
   let values = map.get(key);
   if (!values) {
     values = /* @__PURE__ */ new Set();
@@ -13559,7 +13559,7 @@ enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 
 // app/javascript/application.js
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("turbo:load", function() {
   const body = document.body;
   const sidebarToggle = document.getElementById("sidebarToggle");
   sidebarToggle.addEventListener("click", function() {
@@ -13575,6 +13575,139 @@ document.addEventListener("DOMContentLoaded", function() {
       body.classList.remove("sidebar-collapsed");
     }
   });
+});
+document.addEventListener("turbo:load", function() {
+  const startCameraBtn = document.getElementById("startCamera");
+  const stopCameraBtn = document.getElementById("stopCamera");
+  const captureBtn = document.getElementById("captureImage");
+  const cameraPlaceholder = document.getElementById("cameraPlaceholder");
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+  const detectionResults = document.getElementById("detectionResults");
+  const clearResultsBtn = document.getElementById("clearResults");
+  const saveResultsBtn = document.getElementById("saveResults");
+  const modelSelect = document.getElementById("modelSelect");
+  let stream = null;
+  startCameraBtn.addEventListener("click", async function() {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: "user"
+        }
+      });
+      video.srcObject = stream;
+      video.style.display = "block";
+      cameraPlaceholder.style.display = "none";
+      startCameraBtn.disabled = true;
+      stopCameraBtn.disabled = false;
+      captureBtn.disabled = false;
+    } catch (err) {
+      console.error("Error accessing camera:", err);
+      detectionResults.value = "Error accessing camera. Please check permissions.";
+    }
+  });
+  stopCameraBtn.addEventListener("click", function() {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      video.style.display = "none";
+      cameraPlaceholder.style.display = "block";
+      startCameraBtn.disabled = false;
+      stopCameraBtn.disabled = true;
+      captureBtn.disabled = true;
+    }
+  });
+  captureBtn.addEventListener("click", function() {
+    if (video.style.display === "block") {
+      const ctx = canvas.getContext("2d");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL("image/jpeg");
+      processImageOnServer(imageData);
+    }
+  });
+  function processImageOnServer(imageData) {
+    const selectedModel = modelSelect.value;
+    detectionResults.value = "Processing...";
+    const formData = new FormData();
+    formData.append("model_type", selectedModel);
+    formData.append("image_data", imageData);
+    fetch("/detections/process_image", {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+        "Accept": "application/json"
+      },
+      body: formData
+    }).then((response) => response.json()).then((data) => {
+      if (data.success) {
+        detectionResults.value = data.result;
+      } else {
+        detectionResults.value = "Error: " + (data.message || "Unknown error");
+      }
+    }).catch((error2) => {
+      console.error("Error processing image:", error2);
+      detectionResults.value = "Error processing image. Please try again.";
+    });
+  }
+  clearResultsBtn.addEventListener("click", function() {
+    detectionResults.value = "";
+  });
+  saveResultsBtn.addEventListener("click", function() {
+    const selectedModel = modelSelect.value;
+    const resultText = detectionResults.value.trim();
+    if (!resultText) {
+      alert("No results to save!");
+      return;
+    }
+    let imageData = null;
+    if (canvas.width > 0) {
+      imageData = canvas.toDataURL("image/jpeg");
+    }
+    const formData = new FormData();
+    formData.append("model_type", selectedModel);
+    formData.append("result_text", resultText);
+    if (imageData) {
+      formData.append("image_data", imageData);
+    }
+    fetch("/detections/save_result", {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+        "Accept": "application/json"
+      },
+      body: formData
+    }).then((response) => response.json()).then((data) => {
+      if (data.success) {
+        alert("Results saved successfully!");
+      } else {
+        alert("Error: " + (data.message || "Unknown error"));
+      }
+    }).catch((error2) => {
+      console.error("Error saving results:", error2);
+      alert("Error saving results. Please try again.");
+    });
+  });
+  let currentFacingMode = "user";
+  function switchCamera() {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: currentFacingMode
+        }
+      }).then((newStream) => {
+        stream = newStream;
+        video.srcObject = stream;
+      }).catch((err) => {
+        console.error("Error switching camera:", err);
+        detectionResults.value = "Error switching camera. Please try again.";
+      });
+    }
+  }
 });
 /*! Bundled license information:
 

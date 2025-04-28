@@ -1,4 +1,3 @@
-require_relative "../json_web_token"
 
 class Api::V1::ApplicationController < ApplicationController
     protect_from_forgery with: :null_session

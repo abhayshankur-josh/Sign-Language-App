@@ -21,7 +21,7 @@
             <h5 class="mb-0">Users List</h5>
           </div>
           <div>
-            <button class="btn btn-manage-groups me-2">
+            <button type="button" class="btn btn-manage-groups me-2" data-bs-toggle="modal" data-bs-target="#notifyUserModal">
               <i class="bi bi-gear-fill me-1"></i> Manage Groups
             </button>
 
@@ -108,3 +108,4 @@
 <%= render 'admins/partials/edit_user'%>
 
 <%= render 'admins/partials/invite_user_modal' %>
+<%= render 'admins/partials/notify_users_modal' %>
