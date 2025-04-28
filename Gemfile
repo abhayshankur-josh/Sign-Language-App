@@ -48,14 +48,19 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "overcommit", "~> 0.66.0"
+
+  gem "rspec-rails", "~> 7.1"
+
+  gem "shoulda-matchers", "~> 6.4"
+
+  gem "factory_bot_rails"
+
+  gem "database_cleaner-active_record"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-
-  # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
-  gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
 
   # Setting up Rubocop
   gem "rubocop", require: false
@@ -79,3 +84,17 @@ end
 gem "jsbundling-rails", "~> 1.3"
 
 gem "devise", "~> 4.9"
+
+gem "jwt", "~> 2.10", ">= 2.10.1"
+
+gem "image_processing", ">= 1.2"
+
+gem "byebug", "~> 11.1", groups: [ :development, :test ]
+
+gem "ajax-datatables-rails"
+
+gem "rack-cors", "~> 2.0"
+
+gem "simplecov", require: false, group: :test
+
+gem "faker", group: :test

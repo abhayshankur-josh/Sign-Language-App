@@ -17,7 +17,18 @@ module SignLanguageApp
     config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
-    #
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "http://localhost:5173",
+          "https://*.postman.com",
+          "http://127.0.0.1:3000",
+          "https://localhost:3000"
+        resource "/api/*",
+          headers: :any,
+          methods: [ :get, :post, :options, :delete ]
+      end
+    end
+    config.action_controller.forgery_protection_origin_check = false
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #

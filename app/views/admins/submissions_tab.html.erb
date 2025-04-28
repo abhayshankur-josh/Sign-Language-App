@@ -1,0 +1,149 @@
+<section class="video-submissions-section py-5">
+  <div class="container-fluid">
+    <!-- Header and Toolbar -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+          <!-- Section Header -->
+          <div class="mb-3 mb-md-0">
+            <h2 class="fw-bold mb-0">Submissions</h2>
+            <p class="text-muted mb-0">Browse and manage your sign content</p>
+          </div>
+          
+          <!-- Toolbar -->
+          <div class="d-flex flex-wrap align-items-center">
+            <!-- Filter Dropdown -->
+            <%# <div class="dropdown me-2 mb-2 mb-md-0">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortByDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-sort me-2"></i>Sort by
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="sortByDropdown">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-clock me-2"></i>Newest First</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i>Oldest First</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Most Viewed</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-star me-2"></i>Highest Rated</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-filter me-2"></i>Active Only</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-hourglass-half me-2"></i>Processing Only</a></li>
+              </ul>
+            </div> %>
+            
+            <!-- Upload Button -->
+            <button 
+              class="btn btn-primary" 
+              data-bs-toggle="modal" 
+              data-bs-target="#uploadVideoModal">
+              <i class="fas fa-upload me-2"></i>Upload New Sign
+            </button>
+          </div>
+        </div>
+        <hr class="my-3">
+      </div>
+    </div>
+
+    <!-- Video Grid Layout -->
+    <div class="row">
+      <table id="submissions-datatable" class="table table-hover py-3" data-source="<%= admins_submissions_path(format: :json) %>">
+        <thead>
+          <tr>
+            <th>Submission ID</th>
+            <th>Sign Title</th>
+            <th>Approver</th>
+            <th>Publisher</th>
+            <th>Status</th>
+            <th>Video</th>
+            <th>Created At</th>
+            <%# <th>Updated At</th> %>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</section>
+
+<%= render "admins/partials/upload_video_modal" %>
+
+<%= render "admins/partials/video_modal" %>
+<script> 
+  document.addEventListener("turbo:load", loadTable);
+
+  // Utility function to format date
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  }
+
+  function loadTable() {
+      var table = document.getElementById("submissions-datatable");
+      
+      // Check if the DataTable is already initialized
+      if ($.fn.DataTable.isDataTable(table)) {
+          table.DataTable().destroy(); // Destroy the existing instance
+          table.find('tbody').empty(); // Clear table content to prevent duplication
+      }
+
+      if (table) {
+          $(table).DataTable({
+          serverSide: true,
+          ajax: {
+              url: table.dataset.source,
+              type: "GET"
+          },
+          columns: [
+              { data: "id" },
+              { data: "sign_title" },
+              { data: "approver_name", searchable: false},
+              { data: "publisher_name" },
+              { data: "sign_status" },
+              { data: "video_path",
+                render: function(data, type, row) {
+                  return `
+                    <button type="button" class="btn play-video btn-primary" data-bs-toggle="modal" data-bs-target="#videoModal" data-video-url="${data}">
+                      View Video
+                    </button>
+                  `;
+                }
+              },
+              { data: "created_at",
+                render: function(data, type, row) {
+                  return formatDate(data);
+                }
+              },
+              <%# { data: "updated_at" ,
+                render: function(data, type, row) {
+                  return formatDate(data);
+                }
+              }, %>
+              {
+                data: "id",
+                render: function(data, type, row) {
+                    return `
+                    <form action="/admins/submissions/${data}" method="DELETE">  
+                      <button type="submit" class="btn btn-outline-danger" data-record-id="${data}">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                    `;
+                },
+                orderable: false,
+                searchable: false
+              }
+          ]
+          });
+      } else {
+          console.error("Table with id 'submissions-datatable' not found");
+      }
+  }
+
+</script>

@@ -1,0 +1,84 @@
+<!-- Modal -->
+<div 
+  class="modal fade" 
+  id="editUserModal"
+  tabindex="-1" 
+  role="dialog" 
+  aria-labelledby="editUserModalLabel" 
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">
+          <i class="bi bi-person-plus me-2"></i>Edit User
+        </h5>
+        <button 
+          type="button" 
+          class="btn-close" 
+          data-bs-dismiss="modal" 
+          aria-label="Close"></button>
+      </div>
+      <%= form_with(local: true, id: "editUserForm") do |form| %>
+      <div class="modal-body">
+          <%= form.hidden_field :userId, id: "modalUserId" %>
+
+          <!-- Name Field -->
+          <div class="mb-3">
+              <%= form.label :userName, "Full Name", class: "form-label" %>
+              <%= form.text_field :userName, class: "form-control", id: "modalUserName", placeholder: "Enter user's full name", required: true %>
+          </div>
+
+          <!-- Email Field -->
+          <div class="mb-3">
+              <%= form.label :userEmail, "Email Address", class: "form-label" %>
+              <%= form.email_field :userEmail, class: "form-control", id: "modalUserEmail", placeholder: "Enter user's email address", required: true %>
+          </div>
+
+          <!-- Role Field -->
+          <div class="mb-3">
+              <%= form.label :userRole, "Role", class: "form-label" %>
+              <%= form.select :userRole, 
+                  options_for_select([['Regular User', 'user'], ['Expert', 'expert'], ['Administrator', 'admin']], ''), 
+                  { include_blank: 'Select user role', required: true }, 
+                  class: 'form-select', 
+                  id: 'modalUserRole' %>
+          </div>
+
+          <!-- Status Toggle Field -->
+          <div class="mb-3">
+            <%= form.label :userStatus, "Status", class: "form-label" %>
+            <div class="form-check form-switch">
+              <%= form.check_box :userStatus, class: "form-check-input", id: "modalUserStatus", required: true %>
+              <%= form.label :userStatus, "Active", class: "form-check-label", for: "modalUserStatus" %>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" form="editUserForm" class="btn btn-edit">
+            <i class="bi bi-send me-2"></i>Save
+          </button>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function editUserModalForm(id) {
+  const users = <%= @users.to_json.html_safe %>;
+  const user = users.find(user => user.id === id);
+  
+  // Update form action URL dynamically
+  const form = document.getElementById('editUserForm');
+  form.action = `/admins/user/${id}/edit`;
+  
+  // Populate form fields
+  document.getElementById('modalUserId').value = user.id;
+  document.getElementById('modalUserName').value = user.full_name;
+  document.getElementById('modalUserEmail').value = user.email;
+  const statusToggle = document.getElementById("modalUserStatus");
+  statusToggle.checked = user.active;
+  
+}
+</script>

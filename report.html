@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>RSpec results</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-size: 80%;
+  }
+  </style>
+  <script type="text/javascript">
+    // <![CDATA[
+
+function addClass(element_id, classname) {
+  document.getElementById(element_id).className += (" " + classname);
+}
+
+function removeClass(element_id, classname) {
+  var elem = document.getElementById(element_id);
+  var classlist = elem.className.replace(classname,'');
+  elem.className = classlist;
+}
+
+function moveProgressBar(percentDone) {
+  document.getElementById("rspec-header").style.width = percentDone +"%";
+}
+
+function makeRed(element_id) {
+  removeClass(element_id, 'passed');
+  removeClass(element_id, 'not_implemented');
+  addClass(element_id,'failed');
+}
+
+function makeYellow(element_id) {
+  var elem = document.getElementById(element_id);
+  if (elem.className.indexOf("failed") == -1) {  // class doesn't includes failed
+    if (elem.className.indexOf("not_implemented") == -1) { // class doesn't include not_implemented
+      removeClass(element_id, 'passed');
+      addClass(element_id,'not_implemented');
+    }
+  }
+}
+
+function apply_filters() {
+  var passed_filter = document.getElementById('passed_checkbox').checked;
+  var failed_filter = document.getElementById('failed_checkbox').checked;
+  var pending_filter = document.getElementById('pending_checkbox').checked;
+
+  assign_display_style("example passed", passed_filter);
+  assign_display_style("example failed", failed_filter);
+  assign_display_style("example not_implemented", pending_filter);
+
+  assign_display_style_for_group("example_group passed", passed_filter);
+  assign_display_style_for_group("example_group not_implemented", pending_filter, pending_filter || passed_filter);
+  assign_display_style_for_group("example_group failed", failed_filter, failed_filter || pending_filter || passed_filter);
+}
+
+function get_display_style(display_flag) {
+  var style_mode = 'none';
+  if (display_flag == true) {
+    style_mode = 'block';
+  }
+  return style_mode;
+}
+
+function assign_display_style(classname, display_flag) {
+  var style_mode = get_display_style(display_flag);
+  var elems = document.getElementsByClassName(classname)
+  for (var i=0; i<elems.length;i++) {
+    elems[i].style.display = style_mode;
+  }
+}
+
+function assign_display_style_for_group(classname, display_flag, subgroup_flag) {
+  var display_style_mode = get_display_style(display_flag);
+  var subgroup_style_mode = get_display_style(subgroup_flag);
+  var elems = document.getElementsByClassName(classname)
+  for (var i=0; i<elems.length;i++) {
+    var style_mode = display_style_mode;
+    if ((display_flag != subgroup_flag) && (elems[i].getElementsByTagName('dt')[0].innerHTML.indexOf(", ") != -1)) {
+      elems[i].style.display = subgroup_style_mode;
+    } else {
+      elems[i].style.display = display_style_mode;
+    }
+  }
+}
+
+    // ]]>
+  </script>
+  <style type="text/css">
+#rspec-header {
+  background: #65C400; color: #fff; height: 4em;
+}
+
+.rspec-report h1 {
+  margin: 0px 10px 0px 10px;
+  padding: 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  font-size: 1.8em;
+  position: absolute;
+}
+
+#label {
+  float:left;
+}
+
+#display-filters {
+  float:left;
+  padding: 28px 0 0 40%;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+}
+
+#summary {
+  float:right;
+  padding: 5px 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  text-align: right;
+}
+
+#summary p {
+  margin: 0 0 0 2px;
+}
+
+#summary #totals {
+  font-size: 1.2em;
+}
+
+.example_group {
+  margin: 0 10px 5px;
+  background: #fff;
+}
+
+dl {
+  margin: 0; padding: 0 0 5px;
+  font: normal 11px "Lucida Grande", Helvetica, sans-serif;
+}
+
+dt {
+  padding: 3px;
+  background: #65C400;
+  color: #fff;
+  font-weight: bold;
+}
+
+dd {
+  margin: 5px 0 5px 5px;
+  padding: 3px 3px 3px 18px;
+}
+
+dd .duration {
+  padding-left: 5px;
+  text-align: right;
+  right: 0px;
+  float:right;
+}
+
+dd.example.passed {
+  border-left: 5px solid #65C400;
+  border-bottom: 1px solid #65C400;
+  background: #DBFFB4; color: #3D7700;
+}
+
+dd.example.not_implemented {
+  border-left: 5px solid #FAF834;
+  border-bottom: 1px solid #FAF834;
+  background: #FCFB98; color: #131313;
+}
+
+dd.example.pending_fixed {
+  border-left: 5px solid #0000C2;
+  border-bottom: 1px solid #0000C2;
+  color: #0000C2; background: #D3FBFF;
+}
+
+dd.example.failed {
+  border-left: 5px solid #C20000;
+  border-bottom: 1px solid #C20000;
+  color: #C20000; background: #FFFBD3;
+}
+
+
+dt.not_implemented {
+  color: #000000; background: #FAF834;
+}
+
+dt.pending_fixed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+dt.failed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+
+#rspec-header.not_implemented {
+  color: #000000; background: #FAF834;
+}
+
+#rspec-header.pending_fixed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+#rspec-header.failed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+
+.backtrace {
+  color: #000;
+  font-size: 12px;
+}
+
+a {
+  color: #BE5C00;
+}
+
+/* Ruby code, style similar to vibrant ink */
+.ruby {
+  font-size: 12px;
+  font-family: monospace;
+  color: white;
+  background-color: black;
+  padding: 0.1em 0 0.2em 0;
+}
+
+.ruby .keyword { color: #FF6600; }
+.ruby .constant { color: #339999; }
+.ruby .attribute { color: white; }
+.ruby .global { color: white; }
+.ruby .module { color: white; }
+.ruby .class { color: white; }
+.ruby .string { color: #66FF00; }
+.ruby .ident { color: white; }
+.ruby .method { color: #FFCC00; }
+.ruby .number { color: white; }
+.ruby .char { color: white; }
+.ruby .comment { color: #9933CC; }
+.ruby .symbol { color: white; }
+.ruby .regex { color: #44B4CC; }
+.ruby .punct { color: white; }
+.ruby .escape { color: white; }
+.ruby .interp { color: white; }
+.ruby .expr { color: white; }
+
+.ruby .offending { background-color: gray; }
+.ruby .linenum {
+  width: 75px;
+  padding: 0.1em 1em 0.2em 0;
+  color: #000000;
+  background-color: #FFFBD3;
+}
+
+  </style>
+</head>
+<body>
+<div class="rspec-report">
+
+<div id="rspec-header">
+  <div id="label">
+    <h1>RSpec Code Examples</h1>
+  </div>
+
+  <div id="display-filters">
+    <input id="passed_checkbox"  name="passed_checkbox"  type="checkbox" checked="checked" onchange="apply_filters()" value="1" /> <label for="passed_checkbox">Passed</label>
+    <input id="failed_checkbox"  name="failed_checkbox"  type="checkbox" checked="checked" onchange="apply_filters()" value="2" /> <label for="failed_checkbox">Failed</label>
+    <input id="pending_checkbox" name="pending_checkbox" type="checkbox" checked="checked" onchange="apply_filters()" value="3" /> <label for="pending_checkbox">Pending</label>
+  </div>
+
+  <div id="summary">
+    <p id="totals">&#160;</p>
+    <p id="duration">&#160;</p>
+  </div>
+</div>
+
+
+<div class="results">
+<div id="div_group_1" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_1" class="passed">Role</dt>
+  </dl>
+</div>
+<div id="div_group_2" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_2" class="passed">validations</dt>
+    <script type="text/javascript">moveProgressBar('2.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">is valid with valid attributes</span><span class='duration'>0.02267s</span></dd>
+    <script type="text/javascript">moveProgressBar('5.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid without a role_name</span><span class='duration'>0.01624s</span></dd>
+    <script type="text/javascript">moveProgressBar('7.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid with a duplicate role_name</span><span class='duration'>0.02831s</span></dd>
+  </dl>
+</div>
+<div id="div_group_3" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_3" class="passed">associations</dt>
+    <script type="text/javascript">moveProgressBar('10.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many users</span><span class='duration'>0.03852s</span></dd>
+  </dl>
+</div>
+<div id="div_group_4" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_4" class="passed">true and false conditions</dt>
+    <script type="text/javascript">moveProgressBar('12.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns true when role_name is present</span><span class='duration'>0.00333s</span></dd>
+    <script type="text/javascript">moveProgressBar('15.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns false when role_name is nil</span><span class='duration'>0.00590s</span></dd>
+    <script type="text/javascript">moveProgressBar('17.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns true when role has users</span><span class='duration'>0.02168s</span></dd>
+    <script type="text/javascript">moveProgressBar('20.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns false when role does not have users</span><span class='duration'>0.00404s</span></dd>
+  </dl>
+</div>
+<div id="div_group_5" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_5" class="passed">Sign</dt>
+  </dl>
+</div>
+<div id="div_group_6" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_6" class="passed">associations</dt>
+    <script type="text/javascript">makeRed('rspec-header');</script>
+    <script type="text/javascript">makeRed('div_group_6');</script>
+    <script type="text/javascript">makeRed('example_group_6');</script>
+    <script type="text/javascript">moveProgressBar('23.0');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">is expected to belong to video required: true</span>
+      <span class="duration">0.01125s</span>
+      <div class="failure" id="failure_1">
+        <div class="message"><pre>  Failure/Error: it { should belong_to(:video) }
+
+  NoMethodError:
+    undefined method `include?&#39; for nil:NilClass
+
+              members.public_send(inclusion_method(members), value)
+                     ^^^^^^^^^^^^
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matchers/required_matcher.rb:38:in `submatcher_passes?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matchers/required_matcher.rb:23:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1642:in `block in failing_submatchers&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1641:in `reject&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1641:in `failing_submatchers&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:2002:in `submatchers_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1589:in `matches?&#39;
+  # ./spec/models/sign_spec.rb:28:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matchers/required_matcher.rb:38:in `submatcher_passes?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matchers/required_matcher.rb:23:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1642:in `block in failing_submatchers&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1641:in `reject&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1641:in `failing_submatchers&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:2002:in `submatchers_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_record/association_matcher.rb:1589:in `matches?&#39;
+./spec/models/sign_spec.rb:28:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">98</span>            record.valid?(context)
+<span class="linenum">99</span>          else
+<span class="offending"><span class="linenum">100</span>            record.valid?</span>
+<span class="linenum">101</span>          end
+<span class="linenum">102</span>
+<span class="linenum">103</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+  </dl>
+</div>
+<div id="div_group_7" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_7" class="passed">validations</dt>
+    <script type="text/javascript">makeRed('div_group_7');</script>
+    <script type="text/javascript">makeRed('example_group_7');</script>
+    <script type="text/javascript">moveProgressBar('25.6');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">is expected to validate that :title cannot be empty/falsy</span>
+      <span class="duration">0.00493s</span>
+      <div class="failure" id="failure_2">
+        <div class="message"><pre>  Failure/Error: it { should validate_presence_of(:title) }
+
+  NoMethodError:
+    undefined method `include?&#39; for nil:NilClass
+
+              members.public_send(inclusion_method(members), value)
+                     ^^^^^^^^^^^^
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:258:in `disallows_original_or_typecast_value?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:180:in `block in matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `all?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `matches?&#39;
+  # ./spec/models/sign_spec.rb:32:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:258:in `disallows_original_or_typecast_value?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:180:in `block in matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `all?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `matches?&#39;
+./spec/models/sign_spec.rb:32:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">98</span>            record.valid?(context)
+<span class="linenum">99</span>          else
+<span class="offending"><span class="linenum">100</span>            record.valid?</span>
+<span class="linenum">101</span>          end
+<span class="linenum">102</span>
+<span class="linenum">103</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('28.2');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">is expected to validate that :description cannot be empty/falsy</span>
+      <span class="duration">0.00546s</span>
+      <div class="failure" id="failure_3">
+        <div class="message"><pre>  Failure/Error: it { should validate_presence_of(:description) }
+
+  NoMethodError:
+    undefined method `include?&#39; for nil:NilClass
+
+              members.public_send(inclusion_method(members), value)
+                     ^^^^^^^^^^^^
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:258:in `disallows_original_or_typecast_value?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:180:in `block in matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `all?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `matches?&#39;
+  # ./spec/models/sign_spec.rb:33:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:258:in `disallows_original_or_typecast_value?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:180:in `block in matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `all?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `matches?&#39;
+./spec/models/sign_spec.rb:33:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">98</span>            record.valid?(context)
+<span class="linenum">99</span>          else
+<span class="offending"><span class="linenum">100</span>            record.valid?</span>
+<span class="linenum">101</span>          end
+<span class="linenum">102</span>
+<span class="linenum">103</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('30.7');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">is expected to validate that :video_id cannot be empty/falsy</span>
+      <span class="duration">0.00332s</span>
+      <div class="failure" id="failure_4">
+        <div class="message"><pre>  Failure/Error: it { should validate_presence_of(:video_id) }
+
+  NoMethodError:
+    undefined method `include?&#39; for nil:NilClass
+
+              members.public_send(inclusion_method(members), value)
+                     ^^^^^^^^^^^^
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:258:in `disallows_original_or_typecast_value?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:180:in `block in matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `all?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `matches?&#39;
+  # ./spec/models/sign_spec.rb:34:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:100:in `perform_validation&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:93:in `validation_result&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:89:in `validation_error_messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:68:in `messages&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:25:in `has_messages?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:59:in `messages_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validator.rb:21:in `call&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:258:in `disallows_original_or_typecast_value?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:180:in `block in matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `all?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_presence_of_matcher.rb:179:in `matches?&#39;
+./spec/models/sign_spec.rb:34:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">98</span>            record.valid?(context)
+<span class="linenum">99</span>          else
+<span class="offending"><span class="linenum">100</span>            record.valid?</span>
+<span class="linenum">101</span>          end
+<span class="linenum">102</span>
+<span class="linenum">103</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('33.3');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">validates inclusion of status in status enum</span>
+      <span class="duration">0.00454s</span>
+      <div class="failure" id="failure_5">
+        <div class="message"><pre>  Failure/Error: should validate_inclusion_of(:status).in_array(Sign.statuses.keys)
+
+  ArgumentError:
+    &#39;123456789&#39; is not a valid status
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setter.rb:83:in `public_send&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setter.rb:83:in `set&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setter.rb:67:in `set!&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:529:in `block in disallows_all_values_outside_of_array?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:528:in `all?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:528:in `disallows_all_values_outside_of_array?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:431:in `matches_for_array?&#39;
+  # /home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:377:in `matches?&#39;
+  # ./spec/models/sign_spec.rb:38:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setter.rb:83:in `public_send&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setter.rb:83:in `set&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setter.rb:67:in `set!&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:38:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `each&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `detect&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher/attribute_setters_and_validators.rb:24:in `first_passing&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `public_send&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:581:in `run&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/allow_value_matcher.rb:437:in `does_not_match?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/disallow_value_matcher.rb:32:in `matches?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:179:in `run_allow_or_disallow_matcher&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validation_matcher.rb:103:in `disallows_value_of&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:529:in `block in disallows_all_values_outside_of_array?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:528:in `all?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:528:in `disallows_all_values_outside_of_array?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:431:in `matches_for_array?&#39;
+/home/abhay/.rvm/gems/ruby-3.1.2/gems/shoulda-matchers-6.4.0/lib/shoulda/matchers/active_model/validate_inclusion_of_matcher.rb:377:in `matches?&#39;
+./spec/models/sign_spec.rb:38:in `block (3 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">81</span>
+<span class="linenum">82</span>          def set
+<span class="offending"><span class="linenum">83</span>            object.public_send("#{attribute_name}=", value_written)</span>
+<span class="linenum">84</span>            after_set_callback.call
+<span class="linenum">85</span>
+<span class="linenum">86</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('35.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">is valid with valid attributes</span><span class='duration'>0.06194s</span></dd>
+    <script type="text/javascript">moveProgressBar('38.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">is invalid without a title</span><span class='duration'>0.03964s</span></dd>
+    <script type="text/javascript">moveProgressBar('41.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">is invalid without a description</span><span class='duration'>0.04894s</span></dd>
+    <script type="text/javascript">moveProgressBar('43.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">is invalid without a video_id</span><span class='duration'>0.03615s</span></dd>
+  </dl>
+</div>
+<div id="div_group_8" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_8" class="passed">User</dt>
+  </dl>
+</div>
+<div id="div_group_9" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_9" class="passed">validations</dt>
+    <script type="text/javascript">moveProgressBar('46.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">is valid with valid attributes</span><span class='duration'>0.00536s</span></dd>
+    <script type="text/javascript">moveProgressBar('48.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid without a full_name</span><span class='duration'>0.00783s</span></dd>
+    <script type="text/javascript">moveProgressBar('51.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid without a role_id</span><span class='duration'>0.00537s</span></dd>
+    <script type="text/javascript">moveProgressBar('53.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid without an email</span><span class='duration'>0.00572s</span></dd>
+    <script type="text/javascript">moveProgressBar('56.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid with a duplicate email</span><span class='duration'>0.01014s</span></dd>
+    <script type="text/javascript">moveProgressBar('58.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid without a password</span><span class='duration'>0.00640s</span></dd>
+    <script type="text/javascript">moveProgressBar('61.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid with a short password</span><span class='duration'>0.00781s</span></dd>
+    <script type="text/javascript">moveProgressBar('64.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">is not valid with an improperly formatted email</span><span class='duration'>0.00463s</span></dd>
+  </dl>
+</div>
+<div id="div_group_10" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_10" class="passed">associations</dt>
+    <script type="text/javascript">moveProgressBar('66.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">belongs to a role</span><span class='duration'>0.00811s</span></dd>
+  </dl>
+</div>
+<div id="div_group_11" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_11" class="passed">callbacks</dt>
+    <script type="text/javascript">moveProgressBar('69.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">sets jti before creation</span><span class='duration'>0.00649s</span></dd>
+  </dl>
+</div>
+<div id="div_group_12" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_12" class="passed">methods</dt>
+    <script type="text/javascript">moveProgressBar('71.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">sets jti before creating a user</span><span class='duration'>0.00757s</span></dd>
+  </dl>
+</div>
+<div id="div_group_13" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_13" class="passed">Video</dt>
+  </dl>
+</div>
+<div id="div_group_14" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_14" class="passed">associations</dt>
+    <script type="text/javascript">moveProgressBar('74.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">is expected to have one sign dependent =&gt; destroy</span><span class='duration'>0.00743s</span></dd>
+    <script type="text/javascript">moveProgressBar('76.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">is expected to have a has_one_attached called video_clip</span><span class='duration'>0.00820s</span></dd>
+    <script type="text/javascript">moveProgressBar('79.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">is expected to have a has_one_attached called video_thumbnail</span><span class='duration'>0.00799s</span></dd>
+  </dl>
+</div>
+<div id="div_group_15" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_15" class="passed">validations</dt>
+    <script type="text/javascript">moveProgressBar('82.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">is expected to validate that :video_clip cannot be empty/falsy</span><span class='duration'>0.01056s</span></dd>
+    <script type="text/javascript">moveProgressBar('84.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">is valid with valid attributes</span><span class='duration'>0.07077s</span></dd>
+    <script type="text/javascript">moveProgressBar('87.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">is invalid without video_clip</span><span class='duration'>0.03657s</span></dd>
+    <script type="text/javascript">moveProgressBar('89.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">is invalid without video_thumbnail</span><span class='duration'>0.02199s</span></dd>
+  </dl>
+</div>
+<div id="div_group_16" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_16" class="passed">Experts::Create</dt>
+  </dl>
+</div>
+<div id="div_group_17" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_17" class="passed">#create</dt>
+  </dl>
+</div>
+<div id="div_group_18" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_18" class="passed">when attributes are valid</dt>
+    <script type="text/javascript">makeRed('div_group_18');</script>
+    <script type="text/javascript">makeRed('example_group_18');</script>
+    <script type="text/javascript">moveProgressBar('92.3');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">creates an expert record successfully</span>
+      <span class="duration">0.01360s</span>
+      <div class="failure" id="failure_6">
+        <div class="message"><pre>  Failure/Error: expect { subject.create }.to change(User, :count).by(1)
+    expected `User.count` to have changed by 1, but was changed by 0
+  # ./spec/services/experts/experts_create_spec.rb:29:in `block (4 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>./spec/services/experts/experts_create_spec.rb:29:in `block (4 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">27</span>
+<span class="linenum">28</span>      it 'creates an expert record successfully' do
+<span class="offending"><span class="linenum">29</span>        expect { subject.create }.to change(User, :count).by(1)</span>
+<span class="linenum">30</span>        result = subject.create
+<span class="linenum">31</span>        expect(result[:success]).to be true
+<span class="linenum">32</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+  </dl>
+</div>
+<div id="div_group_19" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_19" class="passed">when passwords do not match</dt>
+    <script type="text/javascript">makeRed('div_group_19');</script>
+    <script type="text/javascript">makeRed('example_group_19');</script>
+    <script type="text/javascript">moveProgressBar('94.8');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">raises an ArgumentError</span>
+      <span class="duration">0.00208s</span>
+      <div class="failure" id="failure_7">
+        <div class="message"><pre>  Failure/Error: expect { subject.create }.to raise_error(ArgumentError, &#39;Password Mismatch!&#39;)
+    expected ArgumentError with &quot;Password Mismatch!&quot; but nothing was raised
+  # ./spec/services/experts/experts_create_spec.rb:40:in `block (4 levels) in &lt;main&gt;&#39;</pre></div>
+        <div class="backtrace"><pre>./spec/services/experts/experts_create_spec.rb:40:in `block (4 levels) in &lt;main&gt;&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">38</span>
+<span class="linenum">39</span>      it 'raises an ArgumentError' do
+<span class="offending"><span class="linenum">40</span>        expect { subject.create }.to raise_error(ArgumentError, 'Password Mismatch!')</span>
+<span class="linenum">41</span>      end
+<span class="linenum">42</span>
+<span class="linenum">43</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('97.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">does not create an expert record</span><span class='duration'>0.00299s</span></dd>
+  </dl>
+</div>
+<div id="div_group_20" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_20" class="passed">when an exception occurs during record creation</dt>
+    <script type="text/javascript">makeRed('div_group_20');</script>
+    <script type="text/javascript">makeRed('example_group_20');</script>
+    <script type="text/javascript">moveProgressBar('100.0');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">logs the exception and returns an error message</span>
+      <span class="duration">0.01087s</span>
+      <div class="failure" id="failure_8">
+        <div class="message"><pre>  Failure/Error: Rails.logger.error &quot;Exception: #{e.full_message}&quot;
+
+    #&lt;ActiveSupport::BroadcastLogger:0x000075dc59dc2700 @broadcasts=[#&lt;ActiveSupport::Logger:0x000075dc59dc36c8 @level=0, @progname=nil, @default_formatter=#&lt;Logger::Formatter:0x000075dc59dbb068 @datetime_format=nil&gt;, @formatter=#&lt;ActiveSupport::Logger::SimpleFormatter:0x000075dc59dc3588 @datetime_format=nil, @thread_key=&quot;activesupport_tagged_logging_tags:19600&quot;&gt;, @logdev=#&lt;Logger::LogDevice:0x000075dc59dbad70 @shift_period_suffix=&quot;%Y%m%d&quot;, @shift_size=104857600, @shift_age=1, @filename=&quot;/home/abhay/Documents/Project/sign_language_app/log/test.log&quot;, @dev=#&lt;File:/home/abhay/Documents/Project/sign_language_app/log/test.log&gt;, @binmode=false, @reraise_write_errors=[], @mon_data=#&lt;Monitor:0x000075dc59dbac08&gt;, @mon_data_owner_object_id=7760&gt;, @level_override={}, @local_level_key=:logger_thread_safe_level_19560&gt;], @progname=&quot;Broadcast&quot;, @formatter=#&lt;ActiveSupport::Logger::SimpleFormatter:0x000075dc59dc3588 @datetime_format=nil, @thread_key=&quot;activesupport_tagged_logging_tags:19600&quot;&gt;&gt; received :error with unexpected arguments
+      expected: (/Exception: Something went wrong/)
+           got: (&quot;Exception: /home/abhay/Documents/Project/sign_language_app/app/queries/role_query.rb:30:in `get_role...ks:22:in `eval&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/bin/ruby_executable_hooks:22:in `&lt;main&gt;&#39;\n&quot;)
+    Diff:[0m
+    [0m[34m@@ -1 +1 @@
+    [0m[31m-[/Exception: Something went wrong/]
+    [0m[32m+[&quot;Exception: /home/abhay/Documents/Project/sign_language_app/app/queries/role_query.rb:30:in `get_role_id&#39;: \e[1mundefined method `id&#39; for nil:NilClass (\e[1;4mNoMethodError\e[m\e[1m)\e[m\n\n\e[1m    @roles.find_by(role_name: role_name).id\e[m\n\e[1m                                        ^^^\e[m\n\tfrom /home/abhay/Documents/Project/sign_language_app/app/queries/user_query.rb:14:in `add_user!&#39;\n\tfrom /home/abhay/Documents/Project/sign_language_app/app/queries/user_query.rb:32:in `create_user!&#39;\n\tfrom /home/abhay/Documents/Project/sign_language_app/app/services/experts/create.rb:26:in `create_experts_record&#39;\n\tfrom /home/abhay/Documents/Project/sign_language_app/app/services/experts/create.rb:9:in `block in create&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/connection_adapters/abstract/transaction.rb:616:in `block in within_new_transaction&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activesupport-7.2.2.1/lib/active_support/concurrency/load_interlock_aware_monitor.rb:23:in `handle_interrupt&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activesupport-7.2.2.1/lib/active_support/concurrency/load_interlock_aware_monitor.rb:23:in `block in synchronize&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activesupport-7.2.2.1/lib/active_support/concurrency/load_interlock_aware_monitor.rb:19:in `handle_interrupt&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activesupport-7.2.2.1/lib/active_support/concurrency/load_interlock_aware_monitor.rb:19:in `synchronize&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/connection_adapters/abstract/transaction.rb:613:in `within_new_transaction&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/connection_adapters/abstract/database_statements.rb:361:in `transaction&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/transactions.rb:234:in `block in transaction&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/connection_adapters/abstract/connection_pool.rb:415:in `with_connection&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/connection_handling.rb:296:in `with_connection&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/activerecord-7.2.2.1/lib/active_record/transactions.rb:233:in `transaction&#39;\n\tfrom /home/abhay/Documents/Project/sign_language_app/app/services/experts/create.rb:7:in `create&#39;\n\tfrom /home/abhay/Documents/Project/sign_language_app/spec/services/experts/experts_create_spec.rb:57:in `block (4 levels) in &lt;main&gt;&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:263:in `instance_exec&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:263:in `block in run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:511:in `block in with_around_and_singleton_context_hooks&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:468:in `block in with_around_example_hooks&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/hooks.rb:486:in `block in run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/hooks.rb:626:in `block in run_around_example_hooks_for&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:352:in `call&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-rails-7.1.1/lib/rspec/rails/adapters.rb:75:in `block (2 levels) in &lt;module:MinitestLifecycleAdapter&gt;&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:457:in `instance_exec&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:457:in `instance_exec&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/hooks.rb:390:in `execute_with&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/hooks.rb:628:in `block (2 levels) in run_around_example_hooks_for&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:352:in `call&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/hooks.rb:629:in `run_around_example_hooks_for&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/hooks.rb:486:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:468:in `with_around_example_hooks&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:511:in `with_around_and_singleton_context_hooks&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example.rb:259:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:646:in `block in run_examples&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:642:in `map&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:642:in `run_examples&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:607:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:608:in `block in run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:608:in `map&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:608:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:608:in `block in run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:608:in `map&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/example_group.rb:608:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:121:in `block (3 levels) in run_specs&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:121:in `map&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:121:in `block (2 levels) in run_specs&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/configuration.rb:2097:in `with_suite_hooks&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:116:in `block in run_specs&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/reporter.rb:74:in `report&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:115:in `run_specs&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:89:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:71:in `run&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/lib/rspec/core/runner.rb:45:in `invoke&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/gems/rspec-core-3.13.3/exe/rspec:4:in `&lt;top (required)&gt;&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/bin/rspec:25:in `load&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/bin/rspec:25:in `&lt;main&gt;&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/bin/ruby_executable_hooks:22:in `eval&#39;\n\tfrom /home/abhay/.rvm/gems/ruby-3.1.2/bin/ruby_executable_hooks:22:in `&lt;main&gt;&#39;\n&quot;]
+    [0m
+  # ./app/services/experts/create.rb:13:in `rescue in create&#39;
+  # ./app/services/experts/create.rb:6:in `create&#39;
+  # ./spec/services/experts/experts_create_spec.rb:57:in `block (4 levels) in &lt;main&gt;&#39;
+  # ------------------
+  # --- Caused by: ---
+  # NoMethodError:
+  #   undefined method `id&#39; for nil:NilClass
+  #   
+  #       @roles.find_by(role_name: role_name).id
+  #                                           ^^^
+  #   ./app/queries/role_query.rb:30:in `get_role_id&#39;</pre></div>
+        <div class="backtrace"><pre>./app/services/experts/create.rb:13:in `rescue in create&#39;
+./app/services/experts/create.rb:6:in `create&#39;
+./spec/services/experts/experts_create_spec.rb:57:in `block (4 levels) in &lt;main&gt;&#39;
+------------------
+--- Caused by: ---
+NoMethodError:
+  undefined method `id&#39; for nil:NilClass
+  
+      @roles.find_by(role_name: role_name).id
+                                          ^^^
+  ./app/queries/role_query.rb:30:in `get_role_id&#39;</pre></div>
+    <pre class="ruby"><code><span class="linenum">11</span>        end
+<span class="linenum">12</span>    rescue Exception => e
+<span class="offending"><span class="linenum">13</span>        Rails.logger.error "Exception: #{e.full_message}"</span>
+<span class="linenum">14</span>        { success: false, message: e.message }
+<span class="linenum">15</span>    end
+<span class="linenum">16</span><span class="comment"># Install the coderay gem to get syntax highlighting</span></code></pre>
+      </div>
+    </dd>
+  </dl>
+</div>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>0.69208 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "39 examples, 8 failures";</script>
+</div>
+</div>
+</body>
+</html>

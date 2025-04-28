@@ -1,0 +1,44 @@
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="videoModalLabel">Video Player</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Video Player -->
+        <video id="videoPlayer" controls width="100%">
+          <source id="videoSource" src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Attach click event listener for play-video links
+    $(document).on("click", ".play-video", function(event) {
+        event.preventDefault();
+        
+        // Get the video URL from the data attribute
+        const videoUrl = $(this).data("video-url");
+
+        // Update the video source and load the video
+        const videoPlayer = document.getElementById("videoPlayer");
+        const videoSource = document.getElementById("videoSource");
+
+        videoSource.src = videoUrl;
+        videoPlayer.load();
+
+        // Show the modal
+        const videoModal = new bootstrap.Modal(document.getElementById("videoModal"));
+        videoModal.show();
+    });
+});
+
+</script>

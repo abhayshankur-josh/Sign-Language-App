@@ -4,6 +4,8 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
+/.github/*
+
 # Ignore bundler config.
 /.bundle
 
@@ -88,3 +90,10 @@ yarn-debug.log*
 !/app/assets/builds/.keep
 
 /node_modules
+/public/fonts/*
+/public/fonts/*
+\!/public/fonts/.keep
+
+
+# Custom
+coverage

@@ -1,0 +1,111 @@
+<!-- Video Detail Modal -->
+<div
+  class="modal fade"
+  id="videoDetailModal"
+  tabindex="-1"
+  aria-labelledby="videoDetailModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="videoDetailModalLabel">Sign Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        <!-- Video Player -->
+        <div class="ratio ratio-16x9">
+          <video id="modalVideoPlayer" controls>
+            <source type="video/mp4" id="modalVideoSource">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        
+        <div class="p-4">
+          <!-- Title and Status -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h4 id="modalVideoTitle">Sign Title</h4>
+            <span class="badge bg-success rounded-pill" id="modalVideoStatus">Active</span>
+          </div>
+          
+          <!-- Views and Date -->
+          <div class="d-flex justify-content-between text-muted mb-3">
+            <span id="modalVideoViews">1,245 views</span>
+            <span id="modalVideoDate">Uploaded on Feb 12, 2025</span>
+          </div>
+          
+          <!-- Description -->
+          <div class="mb-4">
+            <h6 class="fw-bold">Description</h6>
+            <p id="modalVideoDescription" class="mb-0">
+              Detailed sign description appears here. This could explain the context,
+              usage, and variations of the sign.
+            </p>
+          </div>
+          
+          <!-- Creator Information -->
+          <div class="d-flex align-items-center mb-4">
+            <img src="" class="rounded-circle me-3" id="modalCreatorAvatar" alt="Creator Avatar" height="40">
+            <div>
+              <h6 class="fw-bold mb-1" id="modalCreatorName">John Smith</h6>
+              <p class="text-muted mb-0" id="modalCreatorInfo">Sign Language Instructor • 10.5K Followers</p>
+            </div>
+          </div>
+          
+          <!-- Tags -->
+          <div class="mb-4">
+            <h6 class="fw-bold">Tags</h6>
+            <div id="modalVideoTags">
+              <span class="badge bg-light text-dark me-2 mb-2">asl</span>
+              <span class="badge bg-light text-dark me-2 mb-2">beginner</span>
+              <span class="badge bg-light text-dark me-2 mb-2">greeting</span>
+              <span class="badge bg-light text-dark me-2 mb-2">everyday</span>
+            </div>
+          </div>
+          
+          <!-- Additional Information -->
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="card bg-light">
+                <div class="card-body p-3">
+                  <h6 class="fw-bold">Category</h6>
+                  <p class="mb-0" id="modalVideoCategory">Conversational</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-light">
+                <div class="card-body p-3">
+                  <h6 class="fw-bold">Duration</h6>
+                  <p class="mb-0" id="modalVideoDuration">00:32</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-light">
+                <div class="card-body p-3">
+                  <h6 class="fw-bold">Quality</h6>
+                  <p class="mb-0" id="modalVideoQuality">1080p HD</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-external-link-alt me-2"></i>Open Full Page
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

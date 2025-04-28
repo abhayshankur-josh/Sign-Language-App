@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Guide - Sign Submission Status</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        .email-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .tagline {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .email-body {
+            padding: 30px;
+        }
+        .submission-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2c3e50;
+        }
+        .detail-row {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .detail-label {
+            font-weight: bold;
+            flex: 1;
+            color: #2c3e50;
+        }
+        .detail-value {
+            font-weight: bold;
+            flex: 2;
+        }
+        .status-approved {
+            background-color: #e8f5e9;
+            border-color: #c8e6c9;
+            color: #2e7d32;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #2e7d32;
+        }
+        .status-rejected {
+            background-color: #ffebee;
+            border-color: #ffcdd2;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #c62828;
+        }
+        .rejection-reason {
+            margin-top: 15px;
+            background-color: rgba(198, 40, 40, 0.05);
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .email-footer {
+            padding: 20px;
+            text-align: center;
+            background-color: #f1f1f1;
+            color: #666666;
+            font-size: 12px;
+        }
+        .status-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .signature {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+        @media only screen and (max-width: 480px) {
+            .email-body {
+                padding: 15px;
+            }
+            .detail-row {
+                flex-direction: column;
+            }
+            .detail-value {
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-4">
+        <div class="email-container">
+            <!-- Email Header -->
+            <div class="email-header">
+                <div class="logo">Gesture Guide</div>
+                <div class="tagline">Your Ultimate Resource for Sign Language Communication</div>
+            </div>
+            
+            <!-- Email Body -->
+            <div class="email-body">
+                <p>Hello <span class="username"><%= @publisher.full_name %></span>,</p>
+                
+                <p>We have an update regarding your recent sign submission to Gesture Guide.</p>
+                
+                <!-- Submission Details Section -->
+                <div class="submission-details">
+                    <h4 class="mb-3">Submission Information</h4>
+                    <div class="detail-row">
+                        <div class="detail-label">Submission ID: </div>
+                        <div class="detail-value"><%= @submission.id %></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Date Submitted: </div>
+                        <div class="detail-value"><%= @submission.created_at.strftime("%B %d, %Y %I:%M %p") %></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Reviewed By: </div>
+                        <div class="detail-value"><%= @submission.approver_name %></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Status: </div>
+                        <div class="detail-value"><%= @submission.sign_status.capitalize %></div>
+                    </div>
+                </div>
+                
+                <!-- Conditional Section for Approval Status -->
+                <% if @submission.sign_status == "approved" %>
+                    <!-- APPROVED_SECTION_START -->
+                    <div class="status-approved">
+                        <h4><span class="status-icon">✓</span> Submission Approved</h4>
+                        <p>Congratulations! Your sign submission has been approved and is now published on Gesture Guide. Your contribution helps make sign language more accessible to our community.</p>
+                        <p>You can view your published sign at:</p>
+                        <p><a href="#" style="color: #2e7d32; font-weight: bold;"><!-- SIGN_URL --></a></p>
+                    </div>
+                    <!-- APPROVED_SECTION_END -->
+                <% else %>
+                    <!-- REJECTED_SECTION_START -->
+                    <div class="status-rejected">
+                        <h4><span class="status-icon">✗</span> Submission Needs Revision</h4>
+                        <p>We've reviewed your sign submission and found that it requires some adjustments before it can be published:</p>
+                        <div class="rejection-reason">
+                            <!-- REJECTION_REASON -->
+                            <%= @reason %>
+                        </div>
+                        <p class="mt-3">Please make the necessary modifications and resubmit. Our goal is to ensure all content on Gesture Guide maintains the highest quality and accuracy standards.</p>
+                    </div>
+                    <!-- REJECTED_SECTION_END -->
+                <% end %>
+                <p class="mt-4">If you have any questions or need further clarification, our support team is here to help.</p>
+                
+                <div class="signature">
+                    <p>Thank you for being part of the Gesture Guide community,</p>
+                    <p><strong>The Gesture Guide Team</strong></p>
+                </div>
+            </div>
+            
+            <!-- Email Footer -->
+            <div class="email-footer">
+                <p>This is an automated notification. Please do not reply to this email.</p>
+                <p>&copy; 2025 Gesture Guide. All rights reserved.</p>
+                <p>
+                    <a href="#" style="color: #666; text-decoration: none; margin: 0 5px;">Privacy Policy</a> |
+                    <a href="#" style="color: #666; text-decoration: none; margin: 0 5px;">Terms of Service</a> |
+                    <a href="#" style="color: #666; text-decoration: none; margin: 0 5px;">Contact Us</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

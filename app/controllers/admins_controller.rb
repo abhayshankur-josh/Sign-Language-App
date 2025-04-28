@@ -1,71 +1,167 @@
 class AdminsController < ApplicationController
-  before_action :authenticate_admin!
-  before_action :set_admin, only: %i[ show edit update destroy ]
+  include AdminsHelper
 
-  # GET /admins or /admins.json
-  def index
-    @admins = Admin.all
+  # Remove auth except when api is ready.
+  before_action :authenticate_user!, except: :card_details
+  before_action :init_values, only: [ :dashboard, :users_tab, :videos_tab ]
+  before_action :proc_params, only: [ :create_user ]
+  before_action :upload_params, only: [ :form_videos ]
+
+  # GET : /admins/dashboard
+  def dashboard
+    @recent_users = @users.order(updated_at: :DESC)
+
+    @total_users = @users.count
+    @expert_count = @users.where(role_id: RoleQuery.instance.get_expert_id).count
+    @learners_count = @users.where(role_id: RoleQuery.instance.get_user_id).count
+
+    @total_submissions = @submissions.count
+    @approved_submissions = @submissions.joins(:sign).where("signs.status = ?", Sign.statuses[:approved]).count
+    @pending_submissions = @submissions.joins(:sign).where("signs.status = ?", Sign.statuses[:pending]).count
+    @rejected_submissions = @submissions.joins(:sign).where("signs.status = ?", Sign.statuses[:rejected]).count
+
+    @total_signs = @signs.count
+    @total_videos = @videos.count
   end
 
-  # GET /admins/1 or /admins/1.json
-  def show
+  # GET : /admins/users
+  def users_tab
   end
 
-  # GET /admins/new
-  def new
-    @admin = Admin.new
+  # GET : /admins/videos
+  def videos_tab
+    @signs_view = SignQuery.instance.generate_signs_with_videos
   end
 
-  # GET /admins/1/edit
-  def edit
-  end
-
-  # POST /admins or /admins.json
-  def create
-    @admin = Admin.new(admin_params)
-
+  # GET : /admins/signs
+  def signs_tab
     respond_to do |format|
-      if @admin.save
-        format.html { redirect_to @admin, notice: "Admin was successfully created." }
-        format.json { render :show, status: :created, location: @admin }
+      format.html
+      format.json { render json: SignDatatable.new(params) }
+    end
+  end
+
+  # GET : /admins/submissions
+  def submissions_tab
+    @current_email = current_user.email
+    respond_to do |format|
+      format.html
+      format.json { render json: SubmissionDatatable.new(params) }
+    end
+  end
+
+  # DELETE : /admins/submissions/:id
+  def delete_submission
+    id = params[:id]
+    submission = SubmissionQuery.instance.get_submissions_view_for(id)
+    begin
+      ActiveRecord::Base.transaction do
+        Submission.destroy(submission.id)
+        Sign.destroy(submission.sign_id)
+        Video.destroy(submission.video_id)
+        flash[:success] = "Submission deleted successfully."
+      end
+    rescue StandardError => e
+      flash[:error] = "#{e.full_message}"
+    end
+    redirect_to admins_submissions_path
+  end
+
+  # POST : /admins/user
+  def create_user
+    begin
+      email = @user_params[:userEmail]
+      full_name = @user_params[:userName]
+      role_name = @user_params[:userRole]
+      ActiveRecord::Base.transaction do
+        @user = UserQuery.instance.create_user!(email, full_name, role_name)
+        UserMailer.user_invitation(@user).deliver_now
+        flash[:success] = "Mail has been sent successfully."
+      end
+    rescue StandardError => e
+      flash[:error] = "#{e.full_message}"
+    end
+    redirect_to admins_users_path
+  end
+
+  # POST   /admins/user/:id/edit
+  def update_user
+    user_params = update_user_params
+    if UserQuery.instance.update_user?(user_params)
+      flash[:notice] = "User updated successfully."
+    else
+      flash[:notice] = "Error updating user."
+    end
+    redirect_to admins_dashboard_path
+  end
+
+  # DELETE /admins/user/:id/deactivate
+  def deactivate_user
+    id = params[:id]
+    if UserQuery.instance.deactivate_user?(id)
+      flash[:notice] = "User deactivated successfully."
+    else
+      flash[:alert] = "Error deactivating user."
+    end
+    redirect_to admins_dashboard_path
+  end
+
+  # POST : /admins/video
+  def form_videos
+    ActiveRecord::Base.transaction do
+      videoId = VideoQuery.instance.create_record(@video_params[:videoFile], @video_params[:thumbnailFile])
+      signId = SignQuery.instance.add_sign(@video_params[:videoTitle], @video_params[:videoDescription], videoId)
+      publisherId = UserQuery.instance.get_user_id(@video_params[:publisherEmail])
+      submissionId = SubmissionQuery.instance.add_submission(publisherId, signId)
+      if submissionId
+        flash[:success] = "Uploaded Successfully"
+        Rails.logger.info "Uploaded Successfully"
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @admin.errors, status: :unprocessable_entity }
+        flash[:warning] = "Upload failed."
+        Rails.logger.info "Upload failed."
       end
     end
+    redirect_to admins_videos_path
+  rescue Exception => e
+    Rails.logger.error "ERROR: #{e.full_message}"
+    flash[:warning] = "Exception occured!"
   end
 
-  # PATCH/PUT /admins/1 or /admins/1.json
-  def update
-    respond_to do |format|
-      if @admin.update(admin_params)
-        format.html { redirect_to @admin, notice: "Admin was successfully updated." }
-        format.json { render :show, status: :ok, location: @admin }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @admin.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /admins/1 or /admins/1.json
-  def destroy
-    @admin.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to admins_path, status: :see_other, notice: "Admin was successfully destroyed." }
-      format.json { head :no_content }
-    end
+  # GET : /admins/video/:sign
+  def card_details
+    data = SignQuery.instance.get_sign_details(params[:sign])
+    render json: data
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_admin
-      @admin = Admin.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def admin_params
-      params.fetch(:admin, {})
-    end
+  def init_values
+    @users = UserQuery.instance.users
+    @signs = SignQuery.instance.signs
+    @videos = VideoQuery.instance.videos
+    @submissions = SubmissionQuery.instance.submissions
+  end
+
+  def proc_params
+    @user_params = params.permit(:authenticity_token, :userName, :userEmail, :userRole)
+  rescue Exception => e
+    render json: { error: e.full_message }, status: :expectation_failed
+  end
+
+  def upload_params
+    @video_params = params.permit(:videoFile, :thumbnailFile, :videoTitle, :videoDescription, :publisherEmail)
+  rescue Exception => e
+    render json: { error: e.full_message }, status: :expectation_failed
+  end
+
+  def update_user_params
+    params.permit(:userId, :userName, :userEmail, :userRole, :userStatus)
+    {
+      id: params[:userId].to_i,
+      full_name: params[:userName],
+      email: params[:userEmail],
+      role_id: RoleQuery.instance.get_role_id(params[:userRole]),
+      active: params[:userStatus]
+    }
+  end
 end
