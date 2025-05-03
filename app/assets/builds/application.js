@@ -13558,28 +13558,10 @@ var Toast = class _Toast extends BaseComponent {
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 
-// app/javascript/application.js
-document.addEventListener("turbo:load", function() {
-  const body = document.body;
-  const sidebarToggle = document.getElementById("sidebarToggle");
-  sidebarToggle.addEventListener("click", function() {
-    body.classList.toggle("sidebar-collapsed");
-  });
-  if (window.innerWidth <= 768) {
-    body.classList.add("sidebar-collapsed");
-  }
-  window.addEventListener("resize", function() {
-    if (window.innerWidth <= 768) {
-      body.classList.add("sidebar-collapsed");
-    } else {
-      body.classList.remove("sidebar-collapsed");
-    }
-  });
-});
-document.addEventListener("turbo:load", function() {
+// app/javascript/detection.js
+document.addEventListener("DOMContentLoaded", function() {
   const startCameraBtn = document.getElementById("startCamera");
   const stopCameraBtn = document.getElementById("stopCamera");
-  const captureBtn = document.getElementById("captureImage");
   const cameraPlaceholder = document.getElementById("cameraPlaceholder");
   const video = document.getElementById("video");
   const canvas = document.getElementById("canvas");
@@ -13588,6 +13570,11 @@ document.addEventListener("turbo:load", function() {
   const saveResultsBtn = document.getElementById("saveResults");
   const modelSelect = document.getElementById("modelSelect");
   let stream = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordingInterval = null;
+  let isRecording = false;
+  const CLIP_DURATION = 5;
   startCameraBtn.addEventListener("click", async function() {
     try {
       stream = await navigator.mediaDevices.getUserMedia({
@@ -13600,9 +13587,10 @@ document.addEventListener("turbo:load", function() {
       video.srcObject = stream;
       video.style.display = "block";
       cameraPlaceholder.style.display = "none";
+      stopCameraBtn.style.display = "block";
       startCameraBtn.disabled = true;
-      stopCameraBtn.disabled = false;
-      captureBtn.disabled = false;
+      startCameraBtn.textContent = "Camera On";
+      startVideoRecordingCycle();
     } catch (err) {
       console.error("Error accessing camera:", err);
       detectionResults.value = "Error accessing camera. Please check permissions.";
@@ -13610,31 +13598,76 @@ document.addEventListener("turbo:load", function() {
   });
   stopCameraBtn.addEventListener("click", function() {
     if (stream) {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+      if (recordingInterval) {
+        clearTimeout(recordingInterval);
+        recordingInterval = null;
+      }
       stream.getTracks().forEach((track) => track.stop());
       video.style.display = "none";
       cameraPlaceholder.style.display = "block";
+      stopCameraBtn.style.display = "none";
       startCameraBtn.disabled = false;
-      stopCameraBtn.disabled = true;
-      captureBtn.disabled = true;
+      startCameraBtn.textContent = "Start Camera";
+      isRecording = false;
     }
   });
-  captureBtn.addEventListener("click", function() {
-    if (video.style.display === "block") {
-      const ctx = canvas.getContext("2d");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL("image/jpeg");
-      processImageOnServer(imageData);
+  function startVideoRecordingCycle() {
+    if (!stream) return;
+    setTimeout(() => {
+      startRecording();
+    }, 1e3);
+  }
+  function startRecording() {
+    if (isRecording || !stream) return;
+    recordedChunks = [];
+    try {
+      mediaRecorder = new MediaRecorder(stream, {
+        mimeType: "video/webm;codecs=vp9"
+      });
+    } catch (e) {
+      try {
+        mediaRecorder = new MediaRecorder(stream, {
+          mimeType: "video/mp4"
+        });
+      } catch (e2) {
+        mediaRecorder = new MediaRecorder(stream);
+      }
     }
-  });
-  function processImageOnServer(imageData) {
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data && event.data.size > 0) {
+        recordedChunks.push(event.data);
+      }
+    };
+    mediaRecorder.onstop = () => {
+      isRecording = false;
+      const videoBlob = new Blob(recordedChunks, { type: "video/webm" });
+      processVideoOnServer(videoBlob);
+      if (stream && stream.active) {
+        setTimeout(() => {
+          startRecording();
+        }, 5e3);
+      }
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    detectionResults.value = "Recording 5-second video clip...";
+    setTimeout(() => {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+    }, CLIP_DURATION * 1e3);
+  }
+  function processVideoOnServer(videoBlob) {
     const selectedModel = modelSelect.value;
-    detectionResults.value = "Processing...";
+    detectionResults.value = "Processing 5-second video clip...";
     const formData = new FormData();
     formData.append("model_type", selectedModel);
-    formData.append("image_data", imageData);
-    fetch("/detections/process_image", {
+    formData.append("file", videoBlob, "recording.webm");
+    console.log(formData);
+    fetch("http://localhost:8000/predict", {
       method: "POST",
       headers: {
         "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
@@ -13643,13 +13676,13 @@ document.addEventListener("turbo:load", function() {
       body: formData
     }).then((response) => response.json()).then((data) => {
       if (data.success) {
-        detectionResults.value = data.result;
+        detectionResults.value = data.gesture;
       } else {
         detectionResults.value = "Error: " + (data.message || "Unknown error");
       }
     }).catch((error2) => {
-      console.error("Error processing image:", error2);
-      detectionResults.value = "Error processing image. Please try again.";
+      console.error("Error processing video:", error2);
+      detectionResults.value = "Error processing video. Please try again.";
     });
   }
   clearResultsBtn.addEventListener("click", function() {
@@ -13708,6 +13741,25 @@ document.addEventListener("turbo:load", function() {
       });
     }
   }
+});
+
+// app/javascript/application.js
+document.addEventListener("turbo:load", function() {
+  const body = document.body;
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  sidebarToggle.addEventListener("click", function() {
+    body.classList.toggle("sidebar-collapsed");
+  });
+  if (window.innerWidth <= 768) {
+    body.classList.add("sidebar-collapsed");
+  }
+  window.addEventListener("resize", function() {
+    if (window.innerWidth <= 768) {
+      body.classList.add("sidebar-collapsed");
+    } else {
+      body.classList.remove("sidebar-collapsed");
+    }
+  });
 });
 /*! Bundled license information:
 

@@ -42,9 +42,14 @@ Rails.application.routes.draw do
 
   # Routes for home :
   get "/signs",                  to: "home#signs"
-  get "/playground",             to: "home#playground"
   get "external_redirect",       to: "home#redirect_to_external"
-
+  get "/playground",             to: "detections#index"
+  resources :detections, only: [:index] do
+    collection do
+      post :process_image
+      post :save_result
+    end
+  end
 
   # Routes for learner :
   resources :learner, only: [ :index ]

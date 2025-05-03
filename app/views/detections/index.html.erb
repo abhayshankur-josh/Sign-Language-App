@@ -1,0 +1,53 @@
+<!-- app/views/detections/index.html.erb -->
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Sign/Action Detection</h3>
+        </div>
+        
+        <div class="card-body">
+          <!-- Model selection dropdown -->
+          <div class="mb-3">
+            <label for="modelSelect" class="form-label">Select Detection Model:</label>
+            <select class="form-select" id="modelSelect">
+              <option value="alphabet">Alphabet</option>
+              <option value="number">Number</option>
+              <option value="words" disabled>Words - Coming Soon</option>
+            </select>
+          </div>
+          
+          <!-- Camera capture area -->
+          <div class="mb-4">
+            <div class="bg-light border rounded d-flex justify-content-center align-items-center" style="height: 400px;" id="cameraView">
+              <div id="cameraPlaceholder">
+                <p class="text-muted mt-2">Camera feed will appear here</p>
+              </div>
+              <video id="video" style="display: none; max-width: 100%; max-height: 100%;" autoplay></video>
+              <canvas id="canvas" style="display: none;"></canvas>
+            </div>
+          </div>
+          
+          <!-- Controls -->
+          <div class="mb-4 d-flex justify-content-between">
+            <button class="btn btn-danger" id="stopCamera" disabled>Stop Camera</button>
+            <button class="btn btn-success" id="startCamera" >Start Camera</button>
+          </div>
+          
+          <!-- Results text area -->
+          <div class="mb-3">
+            <label for="detectionResults" class="form-label">Detection Results:</label>
+            <textarea class="form-control" id="detectionResults" rows="4" readonly placeholder="Detection results will appear here..."></textarea>
+          </div>
+          
+          <!-- Action buttons -->
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-secondary me-2" id="clearResults">Clear Results</button>
+            <%# <button class="btn btn-primary" id="saveResults">Save Results</button> %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
